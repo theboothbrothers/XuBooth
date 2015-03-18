@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#########################################################################
-# XuBooth 1.2.4
-#########################################################################
+########################################################################################################################
+# XuBooth 1.2.5
+########################################################################################################################
 #  2015-01-24	initial release
 #  2015-03-11	moved from ImageMagick to GraphicsMagick (performance)
 #		introduced XuBooth OTA Gallery
@@ -19,7 +19,9 @@
 #			<<<wlan_pass>>>
 #		added README for documentation purposes
 #		added install.sh for easily installing prerequisites
-#########################################################################
+#		FIX: added wrapping quotes to <<<wlan_ssid>>> and <<<wlan_pass>>> in hostapd.conf
+#		FIX: cleanup function kills eog and feh
+########################################################################################################################
 
 function check_prerequisites() {
 	check=0
@@ -107,6 +109,9 @@ function wait_for_camera() {
 }
 
 function cleanup() {
+	killall eog 2> /dev/null
+	killall feh 2> /dev/null
+
 	rm photo_dir.tmp 2> /dev/null
 	rm XuBooth.lock 2> /dev/null
 
