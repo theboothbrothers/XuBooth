@@ -1,0 +1,36 @@
+auto lo
+iface lo inet loopback
+
+# ---------------------------------------
+#  The Booth Brothers - OTA Config START
+# ---------------------------------------
+
+	# ------------------------------
+	# wifi with fixed IP for hostapd
+	# ------------------------------
+	auto wlan0
+	iface wlan0 inet static
+	address 10.0.0.1
+	netmask 255.255.255.0
+	broadcast 10.0.0.255
+
+	# reset firewall, clear tables
+#	up /sbin/iptables --flush
+#	up /sbin/iptables --delete-chain
+#	up /sbin/iptables --table nat --flush
+
+	# mask wired network, activate port-forwarding and NAT
+#	up iptables --append FORWARD --out-interface eth0 --in-interface wlan0 --source 192.168.0.0/24 --match conntrack --ctstate NEW --jump ACCEPT
+#	up iptables --append FORWARD --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT
+#	up iptables --table nat --append POSTROUTING --out-interface eth0 --jump MASQUERADE
+#	up sysctl --write net.ipv4.ip_forward=1
+
+	# hostapd and dnsmasq services
+	up service hostapd restart
+	up service dnsmasq restart
+	down service hostapd stop
+	down service dnsmasq stop
+
+# -------------------------------------
+#  The Booth Brothers - OTA Config END
+# -------------------------------------
