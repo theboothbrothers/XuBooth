@@ -1,16 +1,5 @@
 #!/bin/bash
 
-#########################################################################
-# XuBooth 1.2
-#########################################################################
-#  2015-01-24	initial release
-#  2015-03-11	moved from ImageMagick to GraphicsMagick (performance)
-#		introduced XuBooth OTA Gallery
-#		added "sooc" subfolder that holds unaltered images
-#  2015-03-17	optimized OTA webserver
-#		introduced standalone config file
-#########################################################################
-
 # -----------------------------------
 # General Settings
 # -----------------------------------
@@ -39,10 +28,19 @@ export exif_contact="www.TheBoothBrothers.de"
 # OTA
 # -----------------------------------
 export ota_active=1
-export ota_images_per_folder=50
-export ota_image_height=1024
-export ota_image_border_color="white"
-export ota_image_border_size=18
-export ota_thumbnail_size=75
-export ota_thumbnail_border_color="white"
-export ota_thumbnail_border_size=5
+
+	# OTA AccessPoint
+	export ota_dev_wlan0=wlan0
+	export ota_dev_eth0=eth0
+	export ota_wlan_driver=nl80211
+	export ota_wlan_ssid="PhotoBooth OTA"
+	export ota_wlan_pass="secretsecret"
+
+	# OTA WebServer
+	export ota_images_per_folder=50
+	export ota_image_height=1024
+	export ota_image_border_color="white"
+	export ota_image_border_size=18
+	export ota_thumbnail_size=75
+	export ota_thumbnail_border_color="white"
+	export ota_thumbnail_border_size=5

@@ -8,8 +8,8 @@ iface lo inet loopback
 	# ------------------------------
 	# wifi with fixed IP for hostapd
 	# ------------------------------
-	auto wlan0
-	iface wlan0 inet static
+	auto <<<dev_wlan0>>>
+	iface <<<dev_wlan0>>> inet static
 	address 10.0.0.1
 	netmask 255.255.255.0
 	broadcast 10.0.0.255
@@ -20,9 +20,9 @@ iface lo inet loopback
 #	up /sbin/iptables --table nat --flush
 
 	# mask wired network, activate port-forwarding and NAT
-#	up iptables --append FORWARD --out-interface eth0 --in-interface wlan0 --source 192.168.0.0/24 --match conntrack --ctstate NEW --jump ACCEPT
+#	up iptables --append FORWARD --out-interface <<<dev_eth0>>> --in-interface <<<dev_wlan0>>> --source 192.168.0.0/24 --match conntrack --ctstate NEW --jump ACCEPT
 #	up iptables --append FORWARD --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT
-#	up iptables --table nat --append POSTROUTING --out-interface eth0 --jump MASQUERADE
+#	up iptables --table nat --append POSTROUTING --out-interface <<<dev_eth0>>> --jump MASQUERADE
 #	up sysctl --write net.ipv4.ip_forward=1
 
 	# hostapd and dnsmasq services

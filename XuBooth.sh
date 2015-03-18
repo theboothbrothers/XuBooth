@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #########################################################################
-# XuBooth 1.2
+# XuBooth 1.2.1
 #########################################################################
 #  2015-01-24	initial release
 #  2015-03-11	moved from ImageMagick to GraphicsMagick (performance)
@@ -9,6 +9,14 @@
 #		added "sooc" subfolder that holds unaltered images
 #  2015-03-17	optimized OTA webserver
 #		introduced standalone config file
+#  2015-03-18	introduced git support
+#		introduced placeholders for ota-conf files
+#			<<<xubooth_dir>>>
+#			<<<dev_wlan0>>>
+#			<<<dev_eth0>>>
+#			<<<wlan_driver>>>
+#			<<<wlan_ssid>>>
+#			<<<wlan_pass>>>
 #########################################################################
 
 function check_prerequisites() {
@@ -58,6 +66,11 @@ function check_prerequisites() {
 
 	if ! type "php5-cgi" 2> /dev/null 1> /dev/null; then
 		echo " * php5-cgi is missing!"
+		((check++))
+	fi
+
+	if ! type "git" 2> /dev/null 1> /dev/null; then
+		echo " * git is missing!"
 		((check++))
 	fi
 
@@ -133,22 +146,37 @@ function startOTA() {
 	# ----------------------------------------------------
 	# we now need root permissions to do the heavy lifting
 	# ----------------------------------------------------
-	echo " * need root permissions to run OTA server"
+	echo " * need root permissions to run OTA service"
 sudo bash <<"EOF" 
-	# put our config files into place (replace keyword "<<<pwd>>>" with working directory (pwd))
-	echo "DAEMON_CONF=$(pwd)/ota-conf/hostapd.conf" > /etc/default/hostapd
+	# call standalone config file
+	source XuBooth-config.sh
+
+	# put our config files into place and replace placeholders
 	cp ./ota-conf/dnsmasq.conf /etc/dnsmasq.conf
+	sed -i "s:<<<dev_wlan0>>>:$ota_dev_wlan0:g" /etc/dnsmasq.conf
+	sed -i "s:<<<dev_eth0>>>:$ota_dev_eth0:g" /etc/dnsmasq.conf
+
+	cp ./ota-conf/hostapd.conf /etc/hostapd.conf
+	sed -i "s:<<<dev_wlan0>>>:$ota_dev_wlan0:g" /etc/hostapd.conf
+	sed -i "s:<<<wlan_driver>>>:$ota_wlan_driver:g" /etc/hostapd.conf
+	sed -i "s:<<<wlan_ssid>>>:$ota_wlan_ssid:g" /etc/hostapd.conf
+	sed -i "s:<<<wlan_pass>>>:$ota_wlan_pass:g" /etc/hostapd.conf
+	echo "DAEMON_CONF=/etc/hostapd.conf" > /etc/default/hostapd
+
 	cp ./ota-conf/interfaces /etc/network/interfaces
+	sed -i "s:<<<dev_wlan0>>>:$ota_dev_wlan0:g" /etc/network/interfaces
+	sed -i "s:<<<dev_eth0>>>:$ota_dev_eth0:g" /etc/network/interfaces
+
 	cp ./ota-conf/lighttpd.conf /etc/lighttpd/lighttpd.conf
-	sed -i "s:<<<pwd>>>:$(pwd):g" /etc/lighttpd/lighttpd.conf
+	sed -i "s:<<<xubooth_dir>>>:$(pwd):g" /etc/lighttpd/lighttpd.conf
 
 	# restart Network Manager and ligHTTPd
 	service network-manager restart
 	service lighttpd restart
 
 	# reload wlan interface
-	ifdown wlan0
-	ifup wlan0
+	ifdown $ota_dev_wlan0
+	ifup $ota_dev_wlan0
 EOF
 
 	# save ota_counter=0 in ota_counter.tmp
@@ -161,10 +189,13 @@ function stopOTA() {
 	# ----------------------------------------------------
 	# we now need root permissions to do the heavy lifting
 	# ----------------------------------------------------
-	echo " * need root permissions to stop OTA server"
+	echo " * need root permissions to stop OTA service"
 sudo bash <<"EOF" 
+	# call standalone config file
+	source XuBooth-config.sh
+
 	# shutdown wlan interface
-	ifdown wlan0
+	ifdown $ota_dev_wlan0
 
 	# restore original config files
 	cp ./ota-conf/hostapd.orig /etc/default/hostapd
@@ -175,6 +206,10 @@ sudo bash <<"EOF"
 	# restart Network Manager and ligHTTPd
 	service network-manager restart
 	service lighttpd restart
+
+	# reload wlan interface
+	ifdown $ota_dev_wlan0
+	ifup $ota_dev_wlan0
 EOF
 
 	# delete stored original config files
