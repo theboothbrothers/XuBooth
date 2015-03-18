@@ -12,10 +12,7 @@ Getting a working copy
 
 Updating the working copy
 --------------------------------------------
- - if you messed up anything, run
-	git checkout .
- - if you messed up BIG TIME (staged some of your changes...), run
-	git checkout origin master
+ - run "update.sh" to remove any changes and load the latest stable version from the internet
 
 
 Uploading changes to the git server

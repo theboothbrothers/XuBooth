@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ########################################################################################################################
-# XuBooth 1.2.5
+# XuBooth 1.2.6
 ########################################################################################################################
 #  2015-01-24	initial release
 #  2015-03-11	moved from ImageMagick to GraphicsMagick (performance)
@@ -19,6 +19,7 @@
 #			<<<wlan_pass>>>
 #		added README for documentation purposes
 #		added install.sh for easily installing prerequisites
+#		added update.sh for easily updating XuBooth from the internet
 #		FIX: added wrapping quotes to <<<wlan_ssid>>> and <<<wlan_pass>>> in hostapd.conf
 #		FIX: cleanup function kills eog and feh
 ########################################################################################################################
