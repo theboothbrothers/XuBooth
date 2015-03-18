@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #########################################################################
-# XuBooth 1.2.1
+# XuBooth 1.2.2
 #########################################################################
 #  2015-01-24	initial release
 #  2015-03-11	moved from ImageMagick to GraphicsMagick (performance)
@@ -17,6 +17,8 @@
 #			<<<wlan_driver>>>
 #			<<<wlan_ssid>>>
 #			<<<wlan_pass>>>
+#		added README for documentation purposes
+#		added install.sh for easily installing prerequisites
 #########################################################################
 
 function check_prerequisites() {
