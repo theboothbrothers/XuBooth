@@ -1,0 +1,28 @@
+########################################################################################################################
+# XuBooth 1.3
+########################################################################################################################
+#  2015-03-19	added dedicated CHANGELOG file and reversed the log order
+#		migrated to different PHP-based gallery for OTA
+#		introduced sample config
+#		included Captive Network Agent (CNA) capabilities for Android and iOS in lighttpd.conf
+#		FIX: in cleanup function => OTA only stopped when ota_active=1
+#  2015-03-18	introduced git support
+#		introduced placeholders for ota-conf files
+#			<<<xubooth_dir>>>
+#			<<<dev_wlan0>>>
+#			<<<dev_eth0>>>
+#			<<<wlan_driver>>>
+#			<<<wlan_ssid>>>
+#			<<<wlan_pass>>>
+#		added README for documentation purposes
+#		added install.sh for easily installing prerequisites
+#		added update.sh for easily updating XuBooth from the internet
+#		FIX: added wrapping quotes to <<<wlan_ssid>>> and <<<wlan_pass>>> in hostapd.conf
+#		FIX: cleanup function kills eog and feh
+#  2015-03-17	optimized OTA webserver
+#		introduced standalone config file
+#  2015-03-11	moved from ImageMagick to GraphicsMagick (performance)
+#		introduced XuBooth OTA Gallery
+#		added "sooc" subfolder that holds unaltered images
+#  2015-01-24	initial release
+########################################################################################################################

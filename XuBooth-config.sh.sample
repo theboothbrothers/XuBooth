@@ -37,10 +37,9 @@ export ota_active=1
 	export ota_wlan_pass="secretsecret"
 
 	# OTA WebServer
-	export ota_images_per_folder=50
 	export ota_image_height=1024
 	export ota_image_border_color="white"
 	export ota_image_border_size=18
 	export ota_thumbnail_size=75
 	export ota_thumbnail_border_color="white"
-	export ota_thumbnail_border_size=5
+	export ota_thumbnail_border_size=0

@@ -1,29 +1,5 @@
 #!/bin/bash
 
-########################################################################################################################
-# XuBooth 1.2.6
-########################################################################################################################
-#  2015-01-24	initial release
-#  2015-03-11	moved from ImageMagick to GraphicsMagick (performance)
-#		introduced XuBooth OTA Gallery
-#		added "sooc" subfolder that holds unaltered images
-#  2015-03-17	optimized OTA webserver
-#		introduced standalone config file
-#  2015-03-18	introduced git support
-#		introduced placeholders for ota-conf files
-#			<<<xubooth_dir>>>
-#			<<<dev_wlan0>>>
-#			<<<dev_eth0>>>
-#			<<<wlan_driver>>>
-#			<<<wlan_ssid>>>
-#			<<<wlan_pass>>>
-#		added README for documentation purposes
-#		added install.sh for easily installing prerequisites
-#		added update.sh for easily updating XuBooth from the internet
-#		FIX: added wrapping quotes to <<<wlan_ssid>>> and <<<wlan_pass>>> in hostapd.conf
-#		FIX: cleanup function kills eog and feh
-########################################################################################################################
-
 function check_prerequisites() {
 	check=0
 
@@ -116,8 +92,10 @@ function cleanup() {
 	rm photo_dir.tmp 2> /dev/null
 	rm XuBooth.lock 2> /dev/null
 
-	echo "Stopping OTA..."
-	stopOTA
+	if [ $ota_active -eq 1 ]; then
+		echo "Stopping OTA..."
+		stopOTA
+	fi
 
 	echo "Done."
 	read
@@ -187,9 +165,6 @@ sudo bash <<"EOF"
 	ifup $ota_dev_wlan0
 EOF
 
-	# save ota_counter=0 in ota_counter.tmp
-	echo 0 > ota_counter.tmp
-
 	echo
 }
 
@@ -225,14 +200,16 @@ EOF
 	rm ./ota-conf/dnsmasq.conf.orig
 	rm ./ota-conf/interfaces.orig
 	rm ./ota-conf/lighttpd.conf.orig
-
-	# delete ota_counter
-	rm ota_counter.tmp 2> /dev/null
 }
 
 # call standalone config file
-chmod a+x XuBooth-config.sh
-source XuBooth-config.sh
+if [ ! -f XuBooth-config.sh ]; then
+	echo "XuBooth-config.sh is missing. Please copy XuBooth-config.sh.sample and modify it to your needs."
+	read
+	exit 1
+else
+	source XuBooth-config.sh
+fi
 
 # check if prerequisites are installed
 check_prerequisites

@@ -5,7 +5,7 @@ $file = $path . $_GET['f'];
 
 if (file_exists($file) && dirname($file) == $path."img-l") {
 	header('Content-Description: File Transfer');
-	header('Content-Type: image/jpg');
+	header('Content-Type: text/html');
 	header('Content-Disposition: attachment; filename=' . basename($file));
 	header('Content-Transfer-Encoding: binary');
 	header('Expires: 0');

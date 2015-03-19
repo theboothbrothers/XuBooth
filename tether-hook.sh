@@ -4,7 +4,6 @@ function downloadImage() {
 	argument=$1
 
 	# call standalone config file
-	chmod a+x XuBooth-config.sh
 	source XuBooth-config.sh
 
 	# read photo_dir.tmp
@@ -43,23 +42,11 @@ function downloadImage() {
 
 	# OTA small/medium sized files creation
 	if [ $ota_active -eq 1 ]; then
-		# increase ota_counter and store it
-		ota_counter=`cat ota_counter.tmp`
-		ota_counter=$((ota_counter+1))
-		echo $ota_counter > ota_counter.tmp
-
-		# create subfolders if necessary
-		ota_lo=`echo "1 + ($ota_images_per_folder * (($ota_counter-1)/$ota_images_per_folder))" | bc`
-		ota_hi=`echo "$ota_lo + $ota_images_per_folder - 1" | bc`
-		ota_subdir=$ota_lo-$ota_hi
-		mkdir -p "$photo_dir/ota-small/$ota_subdir"
-		mkdir -p "$photo_dir/ota-medium/$ota_subdir"
+		# small sized version (thumbnail)
+		gm convert "$argument" -thumbnail x120 -unsharp 0x.5 -bordercolor $ota_thumbnail_border_color -border $ota_thumbnail_border_size -flatten "$photo_dir/ota-small/$filename"
 
 		# medium sized version
-		gm convert "$argument" -thumbnail x$ota_image_height -unsharp 0x.5 -bordercolor $ota_image_border_color -border $ota_image_border_size -flatten "$photo_dir/ota-medium/$ota_subdir/$filename"
-
-		# small sized version (thumbnail)
-		gm convert "$argument" -thumbnail x$ota_thumbnail_size -unsharp 0x.5 -bordercolor $ota_thumbnail_border_color -border $ota_thumbnail_border_size -flatten "$photo_dir/ota-small/$ota_subdir/$filename"
+		gm convert "$argument" -thumbnail x$ota_image_height -unsharp 0x.5 -bordercolor $ota_image_border_color -border $ota_image_border_size -flatten "$photo_dir/ota-medium/$filename"
 	fi
 }
 
