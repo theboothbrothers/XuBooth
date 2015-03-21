@@ -27,8 +27,8 @@
 		<h2>Your Photobooth Gallery</h2>
 	</header>
 
-	<div id="reload"><a href="/"></a></div>
-
+	<div id="reload"><a href=""></a></div>
+	
 	<div class="thumbs">
 		<?php include("thumbs.php"); ?>
 	</div>

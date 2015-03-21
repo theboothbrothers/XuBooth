@@ -3,6 +3,7 @@
 # -----------------------------------
 # General Settings
 # -----------------------------------
+export filename_prefix=theboothbrothers
 export show_photo_in_sec="120"
 export slideshow_interval_in_sec="10"
 

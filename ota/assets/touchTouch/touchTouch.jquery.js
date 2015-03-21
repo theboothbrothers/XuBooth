@@ -248,13 +248,14 @@
 		// Returns a jQuery object
 
 		function loadImage(src, alt, callback){
-			var ahref = $('<a>').attr("href", "/download.php?f=" + alt);
-			var img = $('<img>').on('load', function(){
-				callback.call(ahref);
+			var span = $('<span>');
+			var ahref = $('<a>').attr("href", "/download.php?f=" + alt).attr("class", "download");
+			var img = $('<img>').on('load', function() {
+				callback.call(span);
 			});
-
-			img.appendTo(ahref);
 			img.attr('src', src);
+			img.appendTo(span);
+			ahref.appendTo(span);
 		}
 
 		function showNext(){

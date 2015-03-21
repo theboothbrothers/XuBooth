@@ -261,7 +261,7 @@ while [ 1 -gt 0 ]; do
 	echo ----------------------------------------------------------------
 	echo " Starting gphoto2 in tethering mode..."
 	echo ----------------------------------------------------------------
-	gphoto2 --quiet --capture-tethered --hook-script=tether-hook.sh --filename="$photo_dir/theboothbrothers_%Y%m%d-%H%M%S.%C" --force-overwrite
+	gphoto2 --quiet --capture-tethered --hook-script=tether-hook.sh --filename="$photo_dir/$filename_prefix-%Y%m%d-%H%M%S.%C" --force-overwrite
 
 	# we get here when the connection was interrupted
 	killall eog 2> /dev/null

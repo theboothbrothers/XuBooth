@@ -15,7 +15,7 @@
 
 
 html{
-	background:url('../img/tile.jpg') repeat #a0c5d1;
+	background-color: #7f2a41;
 }
 
 
@@ -65,8 +65,9 @@ header h1{
 }
 
 header h2{
-	font-size:13px;
-	color:#b2483a;
+	font-size:11px;
+	letter-spacing: 4px;
+	color:#7f2a41;
 }
 
 
@@ -75,27 +76,55 @@ header h2{
 -----------------------------*/
 #reload {
 	position: fixed;
-	top: 30px;
-	right: 30px;
+	top: 5px;
+	right: 5px;
 	z-index: 999;
-	width: 50px;
-	height: 50px;
+	width: 32px;
+	height: 32px;
 }
 
 #reload a{
-	width: 50px;
-	height: 50px;
+	width: 32px;
+	height: 32px;
 	display: inline-block;
 	position: relative;
 	text-decoration: none;
 	background-position:center center;
 	background-image: url("../img/reload.png");
-	background-size: 50px 50px;
+	background-size: 32px 32px;
 	background-repeat: no-repeat;
 	background-size:cover;
 	-moz-background-size:cover;
 	-webkit-background-size:cover;
 }
+
+
+/*----------------------------
+	Download Button
+-----------------------------*/
+.download {
+	display: inline-block;
+	margin-left: -52px;
+	margin-bottom: 4px;
+	width: 48px;
+	height: 32px;
+	vertical-align: bottom;
+	opacity: 0.75;
+	background-position:center center;
+	background-image: url("../img/download.png");
+	background-size: 48px 32px;
+	background-repeat: no-repeat;
+	
+	-moz-transition:opacity 0.2s ease;
+	-webkit-transition:opacity 0.2s ease;
+	transition:opacity 0.2s ease;
+}
+
+.download:hover {
+	opacity: 1.0;
+}
+
+
 
 /*----------------------------
 	Thumbnails
