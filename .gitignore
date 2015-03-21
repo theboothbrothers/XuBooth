@@ -1,4 +1,5 @@
 XuBooth-config.sh
 advertisement/user_*
 images/user_*
+photos_*/
 photos_*/**

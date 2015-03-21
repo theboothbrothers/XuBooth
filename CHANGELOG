@@ -1,5 +1,5 @@
 ########################################################################################################################
-# XuBooth 1.3.1
+# XuBooth 1.3.2
 ########################################################################################################################
 #  2015-03-21	FIX: content type in download.php set to image/jpeg
 #		FIX: added download button to OTA gallery and cleaned up some CSS
@@ -9,6 +9,7 @@
 #		some .gitignore additions to allow user content to stay after updating via git
 #		 - advertisement/user_*
 #		 - images/user_*
+#		 - photos_*/
 #		 - photos_*/**
 #  2015-03-19	added dedicated CHANGELOG file and reversed the log order
 #		migrated to different PHP-based gallery for OTA
