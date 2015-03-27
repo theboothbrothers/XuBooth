@@ -3,11 +3,11 @@
 function downloadImage() {
 	argument=$1
 
-	# call standalone config file
-	source XuBooth-config.sh
+	# read/run tmp-vars
+	source "XuBooth-tmp-vars.sh"
 
-	# read photo_dir.tmp
-	photo_dir=`cat photo_dir.tmp`
+	# call configuration
+	source "$config_file"
 
 	# extract filename from $argument
 	filename=$(basename $argument)

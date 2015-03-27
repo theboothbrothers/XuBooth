@@ -1,5 +1,7 @@
-XuBooth-config.sh
-advertisement/user_*
-images/user_*
+config/*
+images/ads/*
+images/overlays/*
 photos_*/
 photos_*/**
+!images/ads/theboothbrothers.jpg
+!images/overlays/theboothbrothers.png

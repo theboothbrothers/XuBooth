@@ -1,3 +1,4 @@
+dfdd
 ====================================
  XuBooth README
 ====================================
@@ -36,6 +37,7 @@ Requirements
  - dnsmasq
  - lighttpd
  - php5-cgi
+ - dialog
  - git
 
  - you can install these by running install.sh with root privileges

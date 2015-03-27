@@ -11,7 +11,7 @@ export slideshow_interval_in_sec="10"
 # Overlay Logo
 # -----------------------------------
 export overlay_active=1
-export overlay_image="images/overlay_theboothbrothers.png"
+export overlay_image="images/overlays/theboothbrothers.png"
 export overlay_opacity_in_percent="60"
 export overlay_orientation="NorthEast"
 export overlay_geometry="x500+0+0"
