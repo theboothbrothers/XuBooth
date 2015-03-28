@@ -18,7 +18,7 @@
 		# check if there are actually config files
 		if [[ -z $(ls -A config/*.sh 2>/dev/null) ]]; then
 			echo "Found no configuration files!"
-			echo " - copy 'XuBooth-config.sh.sample' to subfolder 'config'"
+			echo " - copy 'XuBooth-sample-config.sh' to subfolder 'config'"
 			echo " - rename to <name-of-choice>.sh"
 			echo " - modify settings to your needs"
 			echo
@@ -256,6 +256,7 @@ sudo bash <<"EOF"
 		cp ./ota-conf/hostapd.conf /etc/hostapd.conf
 		sed -i "s:<<<dev_wlan0>>>:$ota_dev_wlan0:g" /etc/hostapd.conf
 		sed -i "s:<<<wlan_driver>>>:$ota_wlan_driver:g" /etc/hostapd.conf
+		sed -i "s:<<<wlan_channel>>>:$ota_wlan_channel:g" /etc/hostapd.conf
 		sed -i "s:<<<wlan_ssid>>>:$ota_wlan_ssid:g" /etc/hostapd.conf
 		sed -i "s:<<<wlan_pass>>>:$ota_wlan_pass:g" /etc/hostapd.conf
 		echo "DAEMON_CONF=/etc/hostapd.conf" > /etc/default/hostapd
@@ -393,7 +394,7 @@ EOF
 		echo "---------------------------------------------------------------------------"
 		echo " Starting gphoto2 in tethering mode..."
 		echo "---------------------------------------------------------------------------"
-		gphoto2 --quiet --capture-tethered --hook-script=tether-hook.sh --filename="$photo_dir/$filename_prefix-%Y%m%d-%H%M%S.%C" --force-overwrite
+		gphoto2 --quiet --capture-tethered --hook-script=XuBooth-tether-hook.sh --filename="$photo_dir/$filename_prefix-%Y%m%d-%H%M%S.%C" --force-overwrite
 
 		# we get here when the connection was interrupted
 		killall eog 2> /dev/null

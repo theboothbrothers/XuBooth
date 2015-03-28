@@ -1,43 +1,36 @@
-dfdd
 ====================================
  XuBooth README
 ====================================
 
+
+Software requirements
+--------------------------------------------
+ - git				# downloading/updating XuBooth
+ - gphoto2			# camera tethering software
+ - eog				# image viewer
+ - feh				# slideshow tool
+ - exiftool			# customization of photos' EXIF data
+ - graphicsmagick		# applying overlays and other graphics onto the photos
+ - hostapd			# wifi access point for Over-The-Air
+ - dnsmasq			# DNS/DHCP server for Over-The-Air
+ - lighttpd			# web server for Over-The-Air
+ - php5-cgi			# php5 module for Over-The-Air
+ - dialog			# CLI-based menu creation tool (used for e.g. choosing one of several XuBooth configurations)
+
+
 Getting a working copy
 --------------------------------------------
- - first time download of a working copy
-	git clone gitro@v45052.1blu.de:/var/lib/git/XuBooth.git
- - a subfolder XuBooth will be created and a working copy of the current version will be downloaded to this folder
- - the user gitro is a read-only user so you won't be able to upload changes to the git server
+ - git clone https://github.com/theboothbrothers/XuBooth.git
+
+
+Cleaning the working copy
+--------------------------------------------
+ - remove any new files you added (config files and images are ignored)
+	git clean -df
+ - undo any changes you might have done to the source code
+	git checkout origin/master -- .
 
 
 Updating the working copy
 --------------------------------------------
- - run "update.sh" to remove any changes and load the latest stable version from the internet
-
-
-Uploading changes to the git server
---------------------------------------------
- - first you need to stage and commit all changes with a comment
-	git commit -a -m "this is the comment"
- - this won't stage deletions, to do this run the following BEFORE the commit
-	git add -u
- - to finally upload to the master branch run the following
-	git push origin master
-
-
-Requirements
---------------------------------------------
- - gphoto2
- - eog
- - feh
- - exiftool
- - graphicsmagick
- - hostapd
- - dnsmasq
- - lighttpd
- - php5-cgi
- - dialog
- - git
-
- - you can install these by running install.sh with root privileges
+ - git pull origin master

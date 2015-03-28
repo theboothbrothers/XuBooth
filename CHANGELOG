@@ -1,6 +1,10 @@
 ########################################################################################################################
-# XuBooth 1.3.3
+# XuBooth 1.3.4
 ########################################################################################################################
+#  2015-03-28	filenames cleaned up
+#		removed Darktable preset (planned for future release)
+#		removed install/update scripts
+#		introduced new placeholder <<<wlan_channel>>> in ota-conf files
 #  2015-03-27	introduced config/ dir to let user choose from several stored configs
 #  2015-03-21	FIX: content type in download.php set to image/jpeg
 #		FIX: added download button to OTA gallery and cleaned up some CSS

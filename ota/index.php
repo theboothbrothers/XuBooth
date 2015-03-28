@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>Over-The-Air</title>
+	<title>Photobooth</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, maximum-scale=1.0" />
 	<link rel="stylesheet" href="assets/css/styles.css" />
 	<link rel="stylesheet" href="assets/touchTouch/touchTouch.css" />

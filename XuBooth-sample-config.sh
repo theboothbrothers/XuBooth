@@ -34,8 +34,9 @@ export ota_active=1
 	export ota_dev_wlan0=wlan0
 	export ota_dev_eth0=eth0
 	export ota_wlan_driver=nl80211
-	export ota_wlan_ssid="PhotoBooth OTA"
-	export ota_wlan_pass="secretsecret"
+	export ota_wlan_channel=1
+	export ota_wlan_ssid="PhotoBooth"
+	export ota_wlan_pass="thepassword"
 
 	# OTA WebServer
 	export ota_image_height=1024
