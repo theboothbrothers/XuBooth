@@ -15,7 +15,7 @@
 
 
 html{
-	background-color: #7f2a41;
+	background-color: <<<body_bgcolor>>>;
 }
 
 
@@ -43,12 +43,12 @@ section, footer, header{
 
 
 header{
-	background-color:#fff;
-	background-image: linear-gradient(top, #FFFFFF 0%, #EDEDED 100%);
-	background-image: -o-linear-gradient(top, #FFFFFF 0%, #EDEDED 100%);
-	background-image: -moz-linear-gradient(top, #FFFFFF 0%, #EDEDED 100%);
-	background-image: -webkit-linear-gradient(top, #FFFFFF 0%, #EDEDED 100%);
-	background-image: -ms-linear-gradient(top, #FFFFFF 0%, #EDEDED 100%);
+	background-color: <<<header_bgcolor_1>>>;
+	background-image: linear-gradient(top, <<<header_bgcolor_1>>> 0%, <<<header_bgcolor_2>>> 100%);
+	background-image: -o-linear-gradient(top, <<<header_bgcolor_1>>> 0%, <<<header_bgcolor_2>>> 100%);
+	background-image: -moz-linear-gradient(top, <<<header_bgcolor_1>>> 0%, <<<header_bgcolor_2>>> 100%);
+	background-image: -webkit-linear-gradient(top, <<<header_bgcolor_1>>> 0%, <<<header_bgcolor_2>>> 100%);
+	background-image: -ms-linear-gradient(top, <<<header_bgcolor_1>>> 0%, <<<header_bgcolor_2>>> 100%);
 	
 	padding:20px;
 	box-shadow:0 2px 4px rgba(0,0,0,0.3);
@@ -68,6 +68,21 @@ header h2{
 	font-size:11px;
 	letter-spacing: 4px;
 	color:#7f2a41;
+}
+
+
+/*----------------------------
+	Disclaimer
+-----------------------------*/
+#disclaimer {
+	margin: 5px 15%;
+	padding: 8px;
+	width: 70%;
+	background-color: #ffffff;
+	text-align: center;
+	font-size: 10px;
+	filter: alpha(opacity=80);
+	opacity: 0.8;
 }
 
 

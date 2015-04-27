@@ -1,6 +1,13 @@
 ########################################################################################################################
-# XuBooth 1.3.4
+# XuBooth 1.4
 ########################################################################################################################
+#  2015-04-27	several new OTA features
+#			- store download statistics (in CSV file)
+#			- customizable branding of OTA page (title, caption, colors...)
+#			- customizable disclaimer on OTA page (to say there's no public internet in OTA's wifi)
+#			- customizable URL that every other domain is redirected to (default: theboothbrothers.de)
+#			- customizable message for iOS users on how to save a photo in Safari
+#			- customizable expiration (in minutes) to only show unexpired photos on OTA page
 #  2015-03-28	filenames cleaned up
 #		removed Darktable preset (planned for future release)
 #		removed install/update scripts

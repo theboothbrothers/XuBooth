@@ -17,6 +17,11 @@
 		nextArrow = $('<a id="nextArrow"></a>'),
 		overlayVisible = false;
 
+	// get message for iOS users
+	var iosMessage = "";
+	$.get("ios_message.php", function(data) {
+		iosMessage = data;
+	});
 
 	/* Creating the plugin */
 
@@ -250,6 +255,13 @@
 		function loadImage(src, alt, callback){
 			var span = $('<span>');
 			var ahref = $('<a>').attr("href", "/download.php?f=" + alt).attr("class", "download");
+			var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
+			if(iOS) {
+				ahref.on('click', function() {
+					alert(iosMessage);
+					return true;
+				});
+			}
 			var img = $('<img>').on('load', function() {
 				callback.call(span);
 			});

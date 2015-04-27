@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>Photobooth</title>
+	<title><<<title>>> | <<<caption>>></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, maximum-scale=1.0" />
 	<link rel="stylesheet" href="assets/css/styles.css" />
 	<link rel="stylesheet" href="assets/touchTouch/touchTouch.css" />
@@ -23,12 +23,16 @@
 <body>
 
 	<header>
-		<h1>Over-The-Air</h1>
-		<h2>Your Photobooth Gallery</h2>
+		<h1><<<title>>></h1>
+		<h2><<<caption>>></h2>
 	</header>
 
 	<div id="reload"><a href=""></a></div>
 	
+	<div id="disclaimer">
+		<<<disclaimer>>>
+	</div>
+
 	<div class="thumbs">
 		<?php include("thumbs.php"); ?>
 	</div>

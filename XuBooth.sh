@@ -232,6 +232,20 @@
 		ln -s ../$photo_dir/ota-medium ota/img-m
 		ln -s ../$photo_dir/ota-small ota/img-s
 
+		# put customized OTA files in OTA folder
+		cp ./ota-conf/ota-index.php ./ota/index.php
+		sed -i "s#<<<title>>>#$ota_title#g" ./ota/index.php
+		sed -i "s#<<<caption>>>#$ota_caption#g" ./ota/index.php
+		sed -i "s#<<<disclaimer>>>#$ota_disclaimer#g" ./ota/index.php
+		cp ./ota-conf/ota-styles.css ./ota/assets/css/styles.css
+		sed -i "s:<<<body_bgcolor>>>:$ota_body_bgcolor:g" ./ota/assets/css/styles.css
+		sed -i "s:<<<header_bgcolor_1>>>:$ota_header_bgcolor_1:g" ./ota/assets/css/styles.css
+		sed -i "s:<<<header_bgcolor_2>>>:$ota_header_bgcolor_2:g" ./ota/assets/css/styles.css
+
+		# create download stats file and give write permissions to "others"
+		echo "Date;IP;User-Agent;File" > $photo_dir/download_stats.csv
+		chmod 777 $photo_dir/download_stats.csv
+
 		# save original config files
 		cp /etc/default/hostapd ./ota-conf/hostapd.orig
 		cp /etc/dnsmasq.conf ./ota-conf/dnsmasq.conf.orig
@@ -267,6 +281,7 @@ sudo bash <<"EOF"
 
 		cp ./ota-conf/lighttpd.conf /etc/lighttpd/lighttpd.conf
 		sed -i "s:<<<xubooth_dir>>>:$(pwd):g" /etc/lighttpd/lighttpd.conf
+		sed -i "s#<<<domain>>>#$ota_domain#g" /etc/lighttpd/lighttpd.conf
 
 		# restart Network Manager and ligHTTPd
 		service network-manager restart
@@ -352,10 +367,12 @@ EOF
 	timestamp=$(date "+%Y%m%d-%H%M%S")
 	photo_dir=photos_$timestamp
 
-	# save global variables to tmp-vars	
+	# save global variables to tmp-vars
 	echo "#!/bin/bash" > XuBooth-tmp-vars.sh
 	echo "export config_file=$config_file" >> XuBooth-tmp-vars.sh
 	echo "export photo_dir=$photo_dir" >> XuBooth-tmp-vars.sh
+	echo "export ota_image_expiration_in_min=$ota_image_expiration_in_min" >> XuBooth-tmp-vars.sh
+	echo "export ota_ios_message=\"$ota_ios_message\"" >> XuBooth-tmp-vars.sh
 
 	# create photo dir (incl. sooc folder) and copy initial ad photos there
 	mkdir $photo_dir

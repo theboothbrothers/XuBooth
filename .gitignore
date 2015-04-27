@@ -5,3 +5,8 @@ photos_*/
 photos_*/**
 !images/ads/theboothbrothers.jpg
 !images/overlays/theboothbrothers.png
+ota/img-l
+ota/img-m
+ota/img-s
+ota/index.php
+ota/assets/css/styles.css

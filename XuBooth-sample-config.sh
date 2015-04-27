@@ -23,8 +23,6 @@ export overlay_jpeg_quality="80"
 export exif_active=0
 export exif_credit="The Booth Brothers"
 export exif_copyright="(c) The Booth Brothers"
-export exif_contact="www.TheBoothBrothers.de"
-
 # -----------------------------------
 # OTA
 # -----------------------------------
@@ -38,7 +36,18 @@ export ota_active=1
 	export ota_wlan_ssid="PhotoBooth"
 	export ota_wlan_pass="thepassword"
 
-	# OTA WebServer
+	# OTA Branding
+	export ota_domain="theboothbrothers.de"
+	export ota_title="Over-The-Air"
+	export ota_caption="Your Photobooth Gallery"
+	export ota_disclaimer="<b>Achtung</b>: in unserem WLAN gibt es <b><u>keinen Zugang</u></b> ins öffentliche Internet. Bitte nach dem Download der Bilder wieder aus dem WLAN abmelden, um im Internet surfen zu können."
+	export ota_ios_message="Zum Speichern bitte lange auf das Bild tippen."
+	export ota_body_bgcolor="#7f2a41"
+	export ota_header_bgcolor_1="#ffffff"
+	export ota_header_bgcolor_2="#ededed"
+
+	# OTA Images
+	export ota_image_expiration_in_min=10
 	export ota_image_height=1024
 	export ota_image_border_color="white"
 	export ota_image_border_size=18
