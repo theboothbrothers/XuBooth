@@ -1,6 +1,7 @@
 ########################################################################################################################
-# XuBooth 1.4
+# XuBooth 1.4.1
 ########################################################################################################################
+#  2015-04-28	fixed iOS Captive Portal support (now filters based on domains AND useragent)
 #  2015-04-27	several new OTA features
 #			- store download statistics (in CSV file)
 #			- customizable branding of OTA page (title, caption, colors...)

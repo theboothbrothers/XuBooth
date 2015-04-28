@@ -237,10 +237,15 @@
 		sed -i "s#<<<title>>>#$ota_title#g" ./ota/index.php
 		sed -i "s#<<<caption>>>#$ota_caption#g" ./ota/index.php
 		sed -i "s#<<<disclaimer>>>#$ota_disclaimer#g" ./ota/index.php
+		mkdir ./ota/assets/css
 		cp ./ota-conf/ota-styles.css ./ota/assets/css/styles.css
 		sed -i "s:<<<body_bgcolor>>>:$ota_body_bgcolor:g" ./ota/assets/css/styles.css
 		sed -i "s:<<<header_bgcolor_1>>>:$ota_header_bgcolor_1:g" ./ota/assets/css/styles.css
 		sed -i "s:<<<header_bgcolor_2>>>:$ota_header_bgcolor_2:g" ./ota/assets/css/styles.css
+		cp ./ota-conf/ota-404.html ./ota/404.html
+		sed -i "s#<<<title>>>#$ota_title#g" ./ota/404.html
+		sed -i "s#<<<caption>>>#$ota_caption#g" ./ota/404.html
+		sed -i "s#<<<domain>>>#$ota_domain#g" ./ota/404.html
 
 		# create download stats file and give write permissions to "others"
 		echo "Date;IP;User-Agent;File" > $photo_dir/download_stats.csv
