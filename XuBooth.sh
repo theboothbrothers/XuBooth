@@ -179,12 +179,12 @@
 		killall eog 2> /dev/null
 		killall feh 2> /dev/null
 
+		# stop OTA
+		stopOTA
+
 		# delete temporary files and lock file
 		rm XuBooth-tmp-vars.sh 2> /dev/null
 		rm XuBooth.lock 2> /dev/null
-
-		# stop OTA
-		stopOTA
 
 		echo "---------------------------------------------------------------------------"
 		echo " XuBooth exited successfully."
@@ -221,8 +221,8 @@
 		echo "---------------------------------------------------------------------------"
 
 		# create folders for OTA gallery
-		mkdir $photo_dir/ota-medium
-		mkdir $photo_dir/ota-small
+		mkdir $photo_dir/ota-medium 2>/dev/null
+		mkdir $photo_dir/ota-small 2>/dev/null
 
 		# link folders for OTA gallery
 		rm ota/img-s 2> /dev/null
@@ -237,7 +237,7 @@
 		sed -i "s#<<<title>>>#$ota_title#g" ./ota/index.php
 		sed -i "s#<<<caption>>>#$ota_caption#g" ./ota/index.php
 		sed -i "s#<<<disclaimer>>>#$ota_disclaimer#g" ./ota/index.php
-		mkdir ./ota/assets/css
+		mkdir ./ota/assets/css 2>/dev/null
 		cp ./ota-conf/ota-styles.css ./ota/assets/css/styles.css
 		sed -i "s:<<<body_bgcolor>>>:$ota_body_bgcolor:g" ./ota/assets/css/styles.css
 		sed -i "s:<<<header_bgcolor_1>>>:$ota_header_bgcolor_1:g" ./ota/assets/css/styles.css
@@ -319,6 +319,7 @@ EOF
 		echo " * need root permissions to stop OTA service"
 sudo bash <<"EOF" 
 		# call configuration
+		source XuBooth-tmp-vars.sh
 		source "$config_file"
 
 		# shutdown wlan interface
