@@ -61,7 +61,7 @@
 			done
 			IFS=$IFSBACKUP
 
-			# let user choose the config file			
+			# let user choose the config file
 			choice=$(dialog --title "Choose configuration" --menu "" 20 60 10 "${config_files[@]}" 3>&2 2>&1 1>&3)
 
 			clear
@@ -80,7 +80,7 @@
 			fi
 		fi
 
-		# load config		
+		# load config
 		echo " * loading $config_file..."
 		echo 
 		source "$config_file"
@@ -396,7 +396,6 @@ EOF
 
 	# get script path
 	script_path=$(cd `dirname "$0"` && pwd)
-echo $script_path
 
 	# define function that is called when ctrl+c is pressed
 	trap ctrl_c SIGINT
