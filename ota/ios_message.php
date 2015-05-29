@@ -1,5 +1,10 @@
 <?php
 
+	/*
+		this script provides the user-configured iOS message
+		it is queried via JSON through "assets/touchTouch/touchTouch.jquery.js"
+	*/
+
 	// save script path
 	$path = dirname(__FILE__) . "/";
 
@@ -9,6 +14,7 @@
 		preg_match("/export ota_ios_message=(.*)/", $XuBoothTmpVars, $matches);
 		$iosMessage = trim($matches[1], '"');
 
+		// output the message
 		echo $iosMessage;
 	}
 ?>

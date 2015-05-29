@@ -10,3 +10,9 @@ ota/img-m
 ota/img-s
 ota/index.php
 ota/assets/css/styles.css
+XuBooth-tmp-vars.sh
+XuBooth.lock
+ota-conf/*.orig
+ota/404.html
+ota/.htpasswd
+ota/hostapd.deny

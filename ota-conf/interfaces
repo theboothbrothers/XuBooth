@@ -2,7 +2,7 @@ auto lo
 iface lo inet loopback
 
 # ---------------------------------------
-#  The Booth Brothers - OTA Config START
+#  XuBooth OTA Config START
 # ---------------------------------------
 
 	# ------------------------------
@@ -14,16 +14,9 @@ iface lo inet loopback
 	netmask 255.255.255.0
 	broadcast 10.0.0.255
 
-	# reset firewall, clear tables
-#	up /sbin/iptables --flush
-#	up /sbin/iptables --delete-chain
-#	up /sbin/iptables --table nat --flush
-
-	# mask wired network, activate port-forwarding and NAT
-#	up iptables --append FORWARD --out-interface <<<dev_eth0>>> --in-interface <<<dev_wlan0>>> --source 192.168.0.0/24 --match conntrack --ctstate NEW --jump ACCEPT
-#	up iptables --append FORWARD --match conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT
-#	up iptables --table nat --append POSTROUTING --out-interface <<<dev_eth0>>> --jump MASQUERADE
-#	up sysctl --write net.ipv4.ip_forward=1
+	# wifi transmission power and power management
+	post-up iw dev <<<dev_wlan0>>> set txpower auto
+	post-up iw dev <<<dev_wlan0>>> set power_save off
 
 	# hostapd and dnsmasq services
 	up service hostapd restart
@@ -32,5 +25,5 @@ iface lo inet loopback
 	down service dnsmasq stop
 
 # -------------------------------------
-#  The Booth Brothers - OTA Config END
+#  XuBooth OTA Config END
 # -------------------------------------

@@ -1,6 +1,20 @@
 #!/bin/bash
 
 # ----------------------------------------------------------------------
+#  <DEFINITIONS>
+# ----------------------------------------------------------------------
+
+	export require_config_version=2
+	export xubooth_config_version=-1
+
+# ----------------------------------------------------------------------
+#  </DEFINITIONS>
+# ----------------------------------------------------------------------
+
+
+
+
+# ----------------------------------------------------------------------
 #  <FUNCTIONS>
 # ----------------------------------------------------------------------
 
@@ -66,9 +80,23 @@
 			fi
 		fi
 
+		# load config		
 		echo " * loading $config_file..."
 		echo 
 		source "$config_file"
+
+		# check config version mismatch
+		if [ "$xubooth_config_version" -ne "$require_config_version" ]; then
+			echo "The configuration does NOT match the required version:"
+			echo " * Required version: $require_config_version"
+			echo " * Provided Version: $xubooth_config_version"
+			echo
+			echo "Please update it (see XuBooth-sample-config.sh)."
+			echo
+			echo "Press <enter> to quit"
+			read
+			exit 1
+		fi
 	}
 
 
@@ -179,12 +207,12 @@
 		killall eog 2> /dev/null
 		killall feh 2> /dev/null
 
+		# stop OTA
+		stopOTA
+
 		# delete temporary files and lock file
 		rm XuBooth-tmp-vars.sh 2> /dev/null
 		rm XuBooth.lock 2> /dev/null
-
-		# stop OTA
-		stopOTA
 
 		echo "---------------------------------------------------------------------------"
 		echo " XuBooth exited successfully."
@@ -221,14 +249,15 @@
 		echo "---------------------------------------------------------------------------"
 
 		# create folders for OTA gallery
-		mkdir $photo_dir/ota-medium
-		mkdir $photo_dir/ota-small
+		mkdir $photo_dir/ota-large 2>/dev/null
+		mkdir $photo_dir/ota-medium 2>/dev/null
+		mkdir $photo_dir/ota-small 2>/dev/null
 
 		# link folders for OTA gallery
 		rm ota/img-s 2> /dev/null
 		rm ota/img-m 2> /dev/null
 		rm ota/img-l 2> /dev/null
-		ln -s ../$photo_dir ota/img-l
+		ln -s ../$photo_dir/ota-large ota/img-l
 		ln -s ../$photo_dir/ota-medium ota/img-m
 		ln -s ../$photo_dir/ota-small ota/img-s
 
@@ -237,10 +266,17 @@
 		sed -i "s#<<<title>>>#$ota_title#g" ./ota/index.php
 		sed -i "s#<<<caption>>>#$ota_caption#g" ./ota/index.php
 		sed -i "s#<<<disclaimer>>>#$ota_disclaimer#g" ./ota/index.php
+		mkdir ./ota/assets/css 2>/dev/null
 		cp ./ota-conf/ota-styles.css ./ota/assets/css/styles.css
 		sed -i "s:<<<body_bgcolor>>>:$ota_body_bgcolor:g" ./ota/assets/css/styles.css
 		sed -i "s:<<<header_bgcolor_1>>>:$ota_header_bgcolor_1:g" ./ota/assets/css/styles.css
 		sed -i "s:<<<header_bgcolor_2>>>:$ota_header_bgcolor_2:g" ./ota/assets/css/styles.css
+		cp ./ota-conf/ota-404.html ./ota/404.html
+		sed -i "s#<<<title>>>#$ota_title#g" ./ota/404.html
+		sed -i "s#<<<caption>>>#$ota_caption#g" ./ota/404.html
+		sed -i "s#<<<domain>>>#$ota_domain#g" ./ota/404.html
+		echo "$ota_management_user:$ota_management_pass" > ./ota/.htpasswd
+		echo "# MAC address filter table" > ./ota/hostapd.deny
 
 		# create download stats file and give write permissions to "others"
 		echo "Date;IP;User-Agent;File" > $photo_dir/download_stats.csv
@@ -266,6 +302,7 @@ sudo bash <<"EOF"
 		cp ./ota-conf/dnsmasq.conf /etc/dnsmasq.conf
 		sed -i "s:<<<dev_wlan0>>>:$ota_dev_wlan0:g" /etc/dnsmasq.conf
 		sed -i "s:<<<dev_eth0>>>:$ota_dev_eth0:g" /etc/dnsmasq.conf
+		sed -i "s:<<<dhcp_lease_in_min>>>:$ota_dhcp_lease_in_min:g" /etc/dnsmasq.conf
 
 		cp ./ota-conf/hostapd.conf /etc/hostapd.conf
 		sed -i "s:<<<dev_wlan0>>>:$ota_dev_wlan0:g" /etc/hostapd.conf
@@ -273,6 +310,8 @@ sudo bash <<"EOF"
 		sed -i "s:<<<wlan_channel>>>:$ota_wlan_channel:g" /etc/hostapd.conf
 		sed -i "s:<<<wlan_ssid>>>:$ota_wlan_ssid:g" /etc/hostapd.conf
 		sed -i "s:<<<wlan_pass>>>:$ota_wlan_pass:g" /etc/hostapd.conf
+		sed -i "s:<<<wlan_country_code>>>:$ota_wlan_country_code:g" /etc/hostapd.conf
+		sed -i "s:<<<xubooth_dir>>>:$script_path:g" /etc/hostapd.conf
 		echo "DAEMON_CONF=/etc/hostapd.conf" > /etc/default/hostapd
 
 		cp ./ota-conf/interfaces /etc/network/interfaces
@@ -280,7 +319,7 @@ sudo bash <<"EOF"
 		sed -i "s:<<<dev_eth0>>>:$ota_dev_eth0:g" /etc/network/interfaces
 
 		cp ./ota-conf/lighttpd.conf /etc/lighttpd/lighttpd.conf
-		sed -i "s:<<<xubooth_dir>>>:$(pwd):g" /etc/lighttpd/lighttpd.conf
+		sed -i "s:<<<xubooth_dir>>>:$script_path:g" /etc/lighttpd/lighttpd.conf
 		sed -i "s#<<<domain>>>#$ota_domain#g" /etc/lighttpd/lighttpd.conf
 
 		# restart Network Manager and ligHTTPd
@@ -314,6 +353,7 @@ EOF
 		echo " * need root permissions to stop OTA service"
 sudo bash <<"EOF" 
 		# call configuration
+		source XuBooth-tmp-vars.sh
 		source "$config_file"
 
 		# shutdown wlan interface
@@ -354,6 +394,10 @@ EOF
 #  <MAIN>
 # ----------------------------------------------------------------------
 
+	# get script path
+	script_path=$(cd `dirname "$0"` && pwd)
+echo $script_path
+
 	# define function that is called when ctrl+c is pressed
 	trap ctrl_c SIGINT
 
@@ -369,8 +413,10 @@ EOF
 
 	# save global variables to tmp-vars
 	echo "#!/bin/bash" > XuBooth-tmp-vars.sh
+	echo "export script_path=$script_path" >> XuBooth-tmp-vars.sh
 	echo "export config_file=$config_file" >> XuBooth-tmp-vars.sh
 	echo "export photo_dir=$photo_dir" >> XuBooth-tmp-vars.sh
+	echo "export ota_images_per_page=$ota_images_per_page" >> XuBooth-tmp-vars.sh
 	echo "export ota_image_expiration_in_min=$ota_image_expiration_in_min" >> XuBooth-tmp-vars.sh
 	echo "export ota_ios_message=\"$ota_ios_message\"" >> XuBooth-tmp-vars.sh
 

@@ -17,8 +17,8 @@
 		$expiration = $matches[1];
 	}
 
-	if (file_exists($file) && dirname($file) == $path."img-l" && ($now - filemtime($file)) <= 60*$expiration) {
-		// open CSV file and write download statistics	
+	if (file_exists($file) && dirname($file) == $path."img-l" && filemtime($file) >= ($now - 60*$expiration)) {
+		// open CSV file and write download statistics
 		$fp = fopen($csvFile, "a");
 		if(flock($fp, LOCK_EX)) {
 			fputcsv($fp, array(date("Y-m-d H:i:s"), $_SERVER["REMOTE_ADDR"], $_SERVER["HTTP_USER_AGENT"], basename($file)), ";");

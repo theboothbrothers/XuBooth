@@ -1,5 +1,12 @@
 #!/bin/bash
 
+#
+# PLEASE DO NOT CHANGE THIS UNLESS YOU KNOW WHAT YOU'RE DOING
+#
+export xubooth_config_version=2
+
+
+
 # -----------------------------------
 # General Settings
 # -----------------------------------
@@ -31,10 +38,12 @@ export ota_active=1
 	# OTA AccessPoint
 	export ota_dev_wlan0=wlan0
 	export ota_dev_eth0=eth0
+	export ota_dhcp_lease_in_min=10
 	export ota_wlan_driver=nl80211
 	export ota_wlan_channel=1
 	export ota_wlan_ssid="PhotoBooth"
 	export ota_wlan_pass="thepassword"
+	export ota_wlan_country_code=DE
 
 	# OTA Branding
 	export ota_domain="theboothbrothers.de"
@@ -47,10 +56,16 @@ export ota_active=1
 	export ota_header_bgcolor_2="#ededed"
 
 	# OTA Images
+	export ota_images_per_page=12
 	export ota_image_expiration_in_min=10
 	export ota_image_height=1024
+	export ota_image_height_download=2048
 	export ota_image_border_color="white"
 	export ota_image_border_size=18
 	export ota_thumbnail_size=75
 	export ota_thumbnail_border_color="white"
 	export ota_thumbnail_border_size=0
+
+	# OTA Management Portal
+	export ota_management_user="admin"
+	export ota_management_pass="thepassword"

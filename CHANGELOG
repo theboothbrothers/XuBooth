@@ -1,6 +1,17 @@
 ########################################################################################################################
-# XuBooth 1.4
+# XuBooth 1.4.5
 ########################################################################################################################
+#  2015-05-29	configuration files now contain version numbers
+#			- to prevent errors when using old configs that	don't hold necessary variables yet
+#		OTA enhancements
+#			- DHCP lease time is now configurable
+#			- disable wifi power management to achieve max. performance
+#			- customizable wifi country code for country specific regulations
+#			- customizable size for downloaded images
+#			- paginated OTA interface (number of images per page is customizable)
+#		FIX: Android and iOS Captive Portals where not configured correctly in lighttpd
+#  2015-04-28	fixed minor bugs
+#  2015-04-28	fixed iOS Captive Portal support (now filters based on domains AND useragent)
 #  2015-04-27	several new OTA features
 #			- store download statistics (in CSV file)
 #			- customizable branding of OTA page (title, caption, colors...)

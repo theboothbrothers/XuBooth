@@ -40,13 +40,16 @@ function downloadImage() {
 		gm composite -compress jpeg -quality $overlay_jpeg_quality -compose over -gravity $overlay_orientation -geometry $overlay_geometry -dissolve $overlay_opacity_in_percent $photo_dir/../$overlay_image "$argument" "$argument"
 	fi
 
-	# OTA small/medium sized files creation
+	# OTA small/medium/large sized files creation
 	if [ $ota_active -eq 1 ]; then
 		# small sized version (thumbnail)
 		gm convert "$argument" -thumbnail x120 -unsharp 0x.5 -bordercolor $ota_thumbnail_border_color -border $ota_thumbnail_border_size -flatten "$photo_dir/ota-small/$filename"
 
 		# medium sized version
 		gm convert "$argument" -thumbnail x$ota_image_height -unsharp 0x.5 -bordercolor $ota_image_border_color -border $ota_image_border_size -flatten "$photo_dir/ota-medium/$filename"
+
+		# large sized version
+		gm convert "$argument" -thumbnail x$ota_image_height_download -unsharp 0x.5 -flatten "$photo_dir/ota-large/$filename"
 	fi
 }
 
