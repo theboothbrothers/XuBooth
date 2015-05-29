@@ -1,5 +1,13 @@
 <?php
 
+	function myfilefilter($now, $expiration) {
+		return function($item) use ($now, $expiration) {
+			if(!is_file("img-l/" . $item)) return false;
+			if(filemtime("img-l/" . $item) < ($now - 60*$expiration)) return false;
+			return true;
+		};
+	}
+
 	function prepareThumbs() {
 		global $files, $expiration;
 
@@ -18,11 +26,7 @@
 		if(count($files)){
 
 			// filter out expired files
-			$files = array_filter($files, function(&$file, &$index) {
-				if(!is_file("img-l/" . $file)) return false;
-				if(filemtime("img-l/" . $file) < ($now - 60*$expiration)) return false;
-				return true;
-			});
+			$files = array_filter($files, myfilefilter($now, $expiration));
 
 			// sort images naturally
 			natcasesort($files);
@@ -51,21 +55,31 @@
 		}
 	}
 
-	function echoPrevPage() {
-		global $currentPage;
-
-		if($currentPage > 1) {
-			echo '<a href="?page=' . ($currentPage-1) . '"> <<< </a>';
-		}
-	}
-
-	function echoNextPage() {
+	function echoPagination() {
 		global $currentPage, $totalImagesVisible, $imagesPerPage;
 
-		if($currentPage*$imagesPerPage < $totalImagesVisible) {
-			echo '<a href="?page=' . ($currentPage+1) . '"> >>> </a>';
+		$numPages = ceil($totalImagesVisible / $imagesPerPage);
+		$start = ($currentPage > 4 ? $currentPage-2 : 1);
+		$end = ($currentPage+3 > $numPages ? $numPages : $currentPage+3);
+		$end = ($start == 1 ? 7 : $end);
+
+		for($i = $start; $i <= $end; $i++) {
+			if($i == $start && $start > 1) {
+				echo "<a href='?page=1'>1</a> | ... | ";
+			}
+			if($i == $currentPage) {			
+				echo sprintf("<a href='#' class='current'>%d</a>", $i);
+			} else {
+				if($i < $end || $end == $numPages) {
+					echo sprintf("<a href='?page=%d'>%d</a>", $i, $i);
+				} else {
+					echo sprintf(" ... | <a href='?page=%d'>%d</a>", $numPages, $numPages);
+				}
+			}
+			if($i < $end) echo " | ";
 		}
 	}
+
 
 
 	$files = array();
@@ -136,8 +150,7 @@
 	</div>
 
 	<div id="pagination">
-		<span id="prevpage"><?php echoPrevPage(); ?></span>
-		<span id="nextpage"><?php echoNextPage(); ?></span>
+		<?php echoPagination(); ?>
 	</div>
 
 	<script src="assets/js/jquery-1.7.1.min.js"></script>

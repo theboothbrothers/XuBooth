@@ -79,10 +79,39 @@ header h2{
 	padding: 8px;
 	width: 70%;
 	background-color: #ffffff;
+	border-radius: 7px;
 	text-align: center;
 	font-size: 10px;
 	filter: alpha(opacity=80);
 	opacity: 0.8;
+}
+
+
+/*----------------------------
+	Pagination
+-----------------------------*/
+#pagination {
+	margin: 5px 5%;
+	padding: 8px;
+	width: 90%;
+	background-color: #333;
+	border-radius: 7px;
+	text-align: center;
+	font-size: 16px;
+	color: #fff;
+	filter: alpha(opacity=90);
+	opacity: 0.9;
+}
+
+#pagination a {
+	padding: 0 15px;
+	color: #fff;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+#pagination a.current {
+	color: #666;
 }
 
 
@@ -119,15 +148,15 @@ header h2{
 -----------------------------*/
 .download {
 	display: inline-block;
-	margin-left: -52px;
+	margin-left: -104px;
 	margin-bottom: 4px;
-	width: 48px;
-	height: 32px;
+	width: 96px;
+	height: 64px;
 	vertical-align: bottom;
 	opacity: 0.75;
 	background-position:center center;
 	background-image: url("../img/download.png");
-	background-size: 48px 32px;
+	background-size: 96px 64px;
 	background-repeat: no-repeat;
 	
 	-moz-transition:opacity 0.2s ease;
@@ -138,7 +167,6 @@ header h2{
 .download:hover {
 	opacity: 1.0;
 }
-
 
 
 /*----------------------------
