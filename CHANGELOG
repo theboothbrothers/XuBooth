@@ -1,5 +1,5 @@
 ########################################################################################################################
-# XuBooth 1.4.5
+# XuBooth 1.4.6
 ########################################################################################################################
 #  2015-05-29	configuration files now contain version numbers
 #			- to prevent errors when using old configs that	don't hold necessary variables yet
