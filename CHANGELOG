@@ -1,6 +1,8 @@
 ########################################################################################################################
-# XuBooth 1.4.8
+# XuBooth 1.4.9
 ########################################################################################################################
+#  2015-05-30	improved OTA management portal
+#		TODO: send SIGHUP to dnsmasq and hostapd using www-data privileges to reload configs
 #  2015-05-30	had to merge branches "master" and "origin/master" due to not checking out before updating........
 #		improved OTA pagination that looks better now
 #  2015-05-29	configuration files now contain version numbers

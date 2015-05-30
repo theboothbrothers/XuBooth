@@ -277,6 +277,9 @@
 		sed -i "s#<<<domain>>>#$ota_domain#g" ./ota/404.html
 		echo "$ota_management_user:$ota_management_pass" > ./ota/.htpasswd
 		echo "# MAC address filter table" > ./ota/hostapd.deny
+		chmod 666 ./ota/hostapd.deny
+		echo "# dnsmasq leases" > ./ota/dnsmasq.leases
+		chmod 666 ./ota/dnsmasq.leases
 
 		# create download stats file and give write permissions to "others"
 		echo "Date;IP;User-Agent;File" > $photo_dir/download_stats.csv
@@ -303,6 +306,7 @@ sudo bash <<"EOF"
 		sed -i "s:<<<dev_wlan0>>>:$ota_dev_wlan0:g" /etc/dnsmasq.conf
 		sed -i "s:<<<dev_eth0>>>:$ota_dev_eth0:g" /etc/dnsmasq.conf
 		sed -i "s:<<<dhcp_lease_in_min>>>:$ota_dhcp_lease_in_min:g" /etc/dnsmasq.conf
+		sed -i "s:<<<xubooth_dir>>>:$script_path:g" /etc/dnsmasq.conf
 
 		cp ./ota-conf/hostapd.conf /etc/hostapd.conf
 		sed -i "s:<<<dev_wlan0>>>:$ota_dev_wlan0:g" /etc/hostapd.conf

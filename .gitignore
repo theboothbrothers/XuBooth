@@ -16,3 +16,4 @@ ota-conf/*.orig
 ota/404.html
 ota/.htpasswd
 ota/hostapd.deny
+ota/dnsmasq.leases
