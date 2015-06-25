@@ -1,0 +1,1 @@
+This folder contains customized configurations. XuBooth will NOT run without at least ONE valid config file in here. Please make a copy of "XuBooth-sample-config.sh" (to be found in XuBooth's root folder) and customize it to your needs.

@@ -5,7 +5,7 @@
 
 Software requirements
 --------------------------------------------
- - git				# downloading/updating XuBooth
+ - git-core			# downloading/updating XuBooth
  - gphoto2			# camera tethering software
  - eog				# image viewer
  - feh				# slideshow tool
@@ -18,6 +18,11 @@ Software requirements
  - dialog			# CLI-based menu creation tool (used for e.g. choosing one of several XuBooth configurations)
 
 
+Install requirements on Debian/Ubuntu
+--------------------------------------------
+sudo apt-get install git-core gphoto2 eog feh exiftool graphicsmagick hostapd dnsmasq lighttpd php5-cgi dialog
+
+
 Getting a working copy
 --------------------------------------------
  - git clone https://github.com/theboothbrothers/XuBooth.git
@@ -25,9 +30,10 @@ Getting a working copy
 
 Cleaning the working copy
 --------------------------------------------
- - remove any new files you added (config files and images are ignored)
+ 1) remove any new files you added (config files and images are ignored)
 	git clean -df
- - undo any changes you might have done to the source code
+
+ 2) undo any changes you might have done to the source code
 	git checkout origin/master -- .
 
 

@@ -151,12 +151,12 @@ header h2{
 	margin-left: -104px;
 	margin-bottom: 4px;
 	width: 96px;
-	height: 64px;
+	height: 65px;
 	vertical-align: bottom;
-	opacity: 0.75;
+	opacity: 1.0;
 	background-position:center center;
 	background-image: url("../img/download.png");
-	background-size: 96px 64px;
+	background-size: 96px 65px;
 	background-repeat: no-repeat;
 	
 	-moz-transition:opacity 0.2s ease;

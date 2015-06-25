@@ -14,7 +14,56 @@ class MyDownloadStat {
 	public $file;
 }
 
+function fetch_contest_stats() {
+	// save script path
+	$path = dirname(__FILE__) . "/";
+
+	// read $photo_dir from XuBooth-tmp-vars.sh:
+	if(file_exists($path . "../XuBooth-tmp-vars.sh")) {
+		$XuBoothTmpVars = file_get_contents($path . "../XuBooth-tmp-vars.sh");
+		preg_match("/export photo_dir=(.*)/", $XuBoothTmpVars, $matches);
+		$photo_dir = $matches[1];
+
+		$statsfile1 = "../" . $photo_dir . "/contest.sh";
+		$statsfile2 = "../" . $photo_dir . "/contest.csv";
+
+		if(file_exists($statsfile1) && file_exists($statsfile2)) {
+			preg_match("/export contest_sticker_images=(.*)/", $XuBoothTmpVars, $matches);
+			$sticker_images = trim($matches[1], '"');
+
+			preg_match("/export contest_max_wins=(.*)/", $XuBoothTmpVars, $matches);
+			$max_wins = trim($matches[1], '"');
+
+			$contestVars = file_get_contents($statsfile1);
+			preg_match("/export contest_remaining_wins=(.*)/", $contestVars, $matches);
+			$remaining_wins = trim($matches[1], '"');
+
+			$arResult = array();
+			$arResult["sticker_images"] = explode("|", $sticker_images);
+			$arResult["max_wins"] = explode("|", $max_wins);
+			$arResult["remaining_wins"] = explode("|", $remaining_wins);
+
+			$f = fopen($statsfile2, "r");
+
+			if($f) {
+				$line = fgets($f);
+				while(($line = fgets($f)) !== false) {
+					$ar = explode(";", $line);
+					$arResult["winners"][$ar[0]][] = $ar[1];
+				}
+
+				fclose($f);
+			}
+
+			return $arResult;
+		}
+	}
+}
+
 function fetch_download_stats() {
+	// save script path
+	$path = dirname(__FILE__) . "/";
+
 	// read $photo_dir from XuBooth-tmp-vars.sh:
 	if(file_exists($path . "../XuBooth-tmp-vars.sh")) {
 		$XuBoothTmpVars = file_get_contents($path . "../XuBooth-tmp-vars.sh");
@@ -27,17 +76,16 @@ function fetch_download_stats() {
 		$stats = array();
 
 		if($f) {
-			$line = fgets($f);
-			while(($line = fgets($f)) !== false) {
+			$data = fgetcsv($f, 0, ";", "\"");
+			while(($data = fgetcsv($f, 0, ";", "\"")) !== false) {
 
-				$ar = explode(";", $line);
 				$x = new MyDownloadStat();
 
-				$x->date = date("Y-m-d H:i:s", $ar[0]);
-				$x->ip = $ar[1];
-				$x->useragent = $ar[2];
-				$x->file = $ar[3];
-		
+				$x->date = $data[0];
+				$x->ip = $data[1];
+				$x->useragent = $data[2];
+				$x->file = $data[3];
+
 				$stats[] = $x;
 			}
 
@@ -87,7 +135,7 @@ function fetch_dhcp_leases() {
 				$dt2->setTimestamp($ar[0]);
 				$remaining = $dt2->diff($dt1);
 
-				$x->time = $remaining->format("%r%H:%m:%S");
+				$x->time = $remaining->format("%r%H:%I:%S");
 				$x->mac = $ar[1];
 				$x->ip = $ar[2];
 				$x->name = $ar[3];
@@ -203,6 +251,41 @@ function checkGET() {
 <body>
 
 <div><?php checkGET(); ?></div>
+
+<?php
+	$contest_stats = fetch_contest_stats();
+	if($contest_stats) {
+?>
+
+		<h1>Contest Statistics</h1>
+		<div class="myframe"><table>
+		<tr>
+			<th>Sticker</th>
+			<th>Wins</th>
+			<th>Remaining Wins</th>
+			<th>Total Wins</th>
+
+		</tr>
+<?php
+		for($i = 0; $i < count($contest_stats["sticker_images"]); $i++) {
+			$wins = $contest_stats["max_wins"][$i] - $contest_stats["remaining_wins"][$i];
+			echo "<tr>";
+			echo sprintf("<td>%s</td>", $contest_stats["sticker_images"][$i]);
+			echo sprintf("<td>%s</td>", $contest_stats["max_wins"][$i] - $contest_stats["remaining_wins"][$i]);
+			echo sprintf("<td>%s</td>", $contest_stats["remaining_wins"][$i]);
+			echo sprintf("<td>%s</td>", $contest_stats["max_wins"][$i]);
+			echo "</tr>";
+
+			$arTmp = array_map( function($element) { return sprintf("<a href='img-m/%s' target='_new'><img src='img-s/%s' border=2 /></a>&nbsp;", $element, $element); }, $contest_stats["winners"][$contest_stats["sticker_images"][$i]]);
+
+			echo "<tr>";
+			echo sprintf("<td colspan=4><ol>%s</ol></td>", implode("", $arTmp));
+			echo "</tr>";
+
+		}
+?>
+		</table></div>
+<?php	} ?>
 
 <h1>Top 10 Downloads</h1>
 <div class="myframe"><ol>

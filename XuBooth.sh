@@ -4,7 +4,7 @@
 #  <DEFINITIONS>
 # ----------------------------------------------------------------------
 
-	export require_config_version=2
+	export require_config_version=7
 	export xubooth_config_version=-1
 
 # ----------------------------------------------------------------------
@@ -101,6 +101,146 @@
 
 
 	# ----------------------------------------------------------------------
+	#  FUNCTION: choose_photodir
+	# ----------------------------------------------------------------------
+	function choose_photodir() {
+
+		echo "---------------------------------------------------------------------------"
+		echo " Checking existing photo directories..."
+		echo "---------------------------------------------------------------------------"
+
+		# check if there are already photo directories
+		if [[ -z $(ls -Ad photos_* 2>/dev/null) ]]; then
+			timestamp=$(date "+%Y%m%d-%H%M%S")
+			photo_dir=photos_$timestamp
+		else
+			let i=0
+			photo_dirs=()
+
+			# collect all config files in array
+			IFSBACKUP=$IFS
+			IFS=$(echo -en "\n\b")
+			for f in `ls -Ad photos_* | sort -fV`; do
+				let i=$i+1
+				photo_dirs+=($i "$f")
+			done
+			IFS=$IFSBACKUP
+
+			# let user choose the config file
+			choice=$(dialog --title "Choose photo directory" --menu "" 20 60 10 "${photo_dirs[@]}" 3>&2 2>&1 1>&3)
+
+			# user cancelled
+			if [ -z "$choice" ]; then
+				echo "No photo directory selected! Creating new one..."
+				timestamp=$(date "+%Y%m%d-%H%M%S")
+				photo_dir=photos_$timestamp
+			else
+				photo_dir=${photo_dirs[2*$choice - 1]}
+			fi
+		fi
+
+		clear
+		echo "---------------------------------------------------------------------------"
+		echo " Checking existing photo directories..."
+		echo "---------------------------------------------------------------------------"
+		echo " * using $photo_dir"
+		echo
+	}
+
+
+	# ----------------------------------------------------------------------
+	#  FUNCTION: choose_lan_device
+	# ----------------------------------------------------------------------
+	function choose_lan_device() {
+
+		# if OTA is not activated, skip this function
+		if [ $ota_active -ne 1 ]; then return; fi
+
+		let i=0
+		lan_devices=()
+
+		# collect all wlan devices in array
+		IFSBACKUP=$IFS
+		IFS=$(echo -en "\n\b")
+		for f in `netstat -i | grep eth | cut -d" " -f1`; do
+			let i=$i+1
+			lan_devices+=($i "$f")
+		done
+		IFS=$IFSBACKUP
+
+		if [ ${#lan_devices[@]} -eq 0 ]; then
+			echo "Could not find a wired network device! Are you sure this machine is equipped with one?"
+			echo
+			echo "Press <enter> to quit"
+			read
+			exit 1
+		else
+			# let user choose the device
+			choice=$(dialog --title "Choose wired network device" --menu "" 20 60 10 "${lan_devices[@]}" 3>&2 2>&1 1>&3)
+
+			clear
+
+			# user cancelled
+			if [ -z "$choice" ]; then
+				echo "No device selected!"
+				echo
+				echo "Press <enter> to quit"
+				read
+				exit 1
+			fi
+
+			ota_dev_eth0=${lan_devices[2*$choice - 1]}
+		fi
+	}
+
+
+	# ----------------------------------------------------------------------
+	#  FUNCTION: choose_wlan_device
+	# ----------------------------------------------------------------------
+	function choose_wlan_device() {
+
+		# if OTA is not activated, skip this function
+		if [ $ota_active -ne 1 ]; then return; fi
+
+		let i=0
+		wlan_devices=()
+
+		# collect all wlan devices in array
+		IFSBACKUP=$IFS
+		IFS=$(echo -en "\n\b")
+		for f in `netstat -i | grep wlan | cut -d" " -f1`; do
+			let i=$i+1
+			wlan_devices+=($i "$f")
+		done
+		IFS=$IFSBACKUP
+
+		if [ ${#wlan_devices[@]} -eq 0 ]; then
+			echo "Could not find a wifi device! Are you sure this machine is equipped with one?"
+			echo
+			echo "Press <enter> to quit"
+			read
+			exit 1
+		else
+			# let user choose the device
+			choice=$(dialog --title "Choose wifi device" --menu "" 20 60 10 "${wlan_devices[@]}" 3>&2 2>&1 1>&3)
+
+			clear
+
+			# user cancelled
+			if [ -z "$choice" ]; then
+				echo "No device selected!"
+				echo
+				echo "Press <enter> to quit"
+				read
+				exit 1
+			fi
+
+			ota_dev_wlan0=${wlan_devices[2*$choice - 1]}
+		fi
+	}
+
+
+	# ----------------------------------------------------------------------
 	#  FUNCTION: check_prerequisites
 	# ----------------------------------------------------------------------
 	function check_prerequisites() {
@@ -167,7 +307,7 @@
 
 		if [ $check -gt 0 ]; then
 			echo
-			echo "One or more prerequisites are missing! Please install them."
+			echo "One or more prerequisites are missing! Please install them (see README for details)."
 			echo "Press <enter> to quit"
 			read
 			exit 1
@@ -407,25 +547,38 @@ EOF
 	# choose config
 	choose_config
 
+	# choose photo directory
+	choose_photodir
+
+	# let user choose lan and wlan devices (if OTA is set active)
+	choose_lan_device
+	choose_wlan_device
+
 	# check if prerequisites are installed
 	check_prerequisites
-
-	# define photo directory
-	timestamp=$(date "+%Y%m%d-%H%M%S")
-	photo_dir=photos_$timestamp
 
 	# save global variables to tmp-vars
 	echo "#!/bin/bash" > XuBooth-tmp-vars.sh
 	echo "export script_path=$script_path" >> XuBooth-tmp-vars.sh
 	echo "export config_file=$config_file" >> XuBooth-tmp-vars.sh
 	echo "export photo_dir=$photo_dir" >> XuBooth-tmp-vars.sh
+	echo "export ota_dev_eth0=$ota_dev_eth0" >> XuBooth-tmp-vars.sh
+	echo "export ota_dev_wlan0=$ota_dev_wlan0" >> XuBooth-tmp-vars.sh
 	echo "export ota_images_per_page=$ota_images_per_page" >> XuBooth-tmp-vars.sh
 	echo "export ota_image_expiration_in_min=$ota_image_expiration_in_min" >> XuBooth-tmp-vars.sh
 	echo "export ota_ios_message=\"$ota_ios_message\"" >> XuBooth-tmp-vars.sh
+	echo "export contest_active=\"$contest_active\"" >> XuBooth-tmp-vars.sh
+	echo "export contest_probability_1_over=\"$contest_probability_1_over\"" >> XuBooth-tmp-vars.sh
+	echo "export contest_max_wins=\"$contest_max_wins\"" >> XuBooth-tmp-vars.sh
+	echo "export contest_sticker_images=\"$contest_sticker_images\"" >> XuBooth-tmp-vars.sh
+	echo "export contest_sticker_opacity_in_percent=\"$contest_sticker_opacity_in_percent\"" >> XuBooth-tmp-vars.sh
+	echo "export contest_sticker_orientation=\"$contest_sticker_orientation\"" >> XuBooth-tmp-vars.sh
+	echo "export contest_sticker_geometry=\"$contest_sticker_geometry\"" >> XuBooth-tmp-vars.sh
+	echo "export contest_sticker_jpeg_quality=\"$contest_sticker_jpeg_quality\"" >> XuBooth-tmp-vars.sh
 
 	# create photo dir (incl. sooc folder) and copy initial ad photos there
-	mkdir $photo_dir
-	mkdir $photo_dir/sooc
+	mkdir $photo_dir 2>/dev/null
+	mkdir $photo_dir/sooc 2>/dev/null
 	cp images/ads/*.jpg $photo_dir 2> /dev/null
 	cp images/ads/*.png $photo_dir 2> /dev/null
 
@@ -454,7 +607,7 @@ EOF
 		sleep 1
 
 		# start slideshow
-		feh -F --hide-pointer --zoom fill -D 5 --randomize $photo_dir/*.jpg &
+		feh -F --hide-pointer --zoom $photo_zoom -D 5 --randomize $photo_dir/*.jpg &
 
 		# start gPhoto2 in tethering mode
 		echo "---------------------------------------------------------------------------"
@@ -468,7 +621,7 @@ EOF
 		echo "---------------------------------------------------------------------------"
 		echo  "Lost connection to camera! Waiting for it to come back on..."
 		echo "---------------------------------------------------------------------------"
-		eog -f -w images/wait.gif &
+		eog -f -w $intermission_image &
 		read -t 5 tmp
 
 		# wait for camera to show up again

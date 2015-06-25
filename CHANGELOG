@@ -1,6 +1,27 @@
 ########################################################################################################################
-# XuBooth 1.4.9
+# XuBooth 1.5
 ########################################################################################################################
+#  2015-06-25	THIS IS A HUGE UPDATE
+#		intermission image ("waiting for camera") is customizable for e.g. branding purposes
+#		configurable zoom setting for slideshow (max = max zoom / fill = fill whole screen)
+#		UI improvements
+#			- wired/wireless network devices can be selected upon start (no need for static config files anymore)
+#			- existing photo directories can be selected for re-use
+#		changes in "The Booth Brothers" branding
+#			- updated "waiting for camera" animation graphic
+#			- updated ads
+#		OTA
+#			- management portal (who is online, download statistics, status of contest mode)
+#			- improved wifi speed
+#			- more visible download image (depending on the photo barely visible before)
+#		introduced Contest Mode
+#			- randomized placement of stickers to signalize winning
+#			- integration into OTA management portal
+#		introduced Tools.sh
+#			- quick selection of tools to make a photoboother's life easier
+#			- ListWifiChannels - lists wifi channels that are used in the surrounding area
+#			- Benchmark - quick way to assess and compare a machine's performance (very unscientific!)
+#			- RepairXuBooth - if XuBooth got killed this will try to restore modified system files
 #  2015-05-30	improved OTA management portal
 #		TODO: send SIGHUP to dnsmasq and hostapd using www-data privileges to reload configs
 #  2015-05-30	had to merge branches "master" and "origin/master" due to not checking out before updating........

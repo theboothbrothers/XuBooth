@@ -2,6 +2,7 @@
 
 	function myfilefilter($now, $expiration) {
 		return function($item) use ($now, $expiration) {
+			if(!is_file("img-s/" . $item)) return false;
 			if(!is_file("img-l/" . $item)) return false;
 			if(filemtime("img-l/" . $item) < ($now - 60*$expiration)) return false;
 			return true;
@@ -24,7 +25,6 @@
 
 		// found images? 
 		if(count($files)){
-
 			// filter out expired files
 			$files = array_filter($files, myfilefilter($now, $expiration));
 
@@ -33,7 +33,6 @@
 
 			// reverse sort order
 			$files = array_reverse($files, false);
-
 			return count($files);
 		}
 
@@ -42,7 +41,11 @@
 
 
 	function echoThumbs() {
-		global $files, $currentPage, $imagesPerPage;
+		global $files, $currentPage, $totalImagesVisible, $imagesPerPage;
+
+		// correct for out-of-bounds $currentPage
+		$numPages = ceil($totalImagesVisible / $imagesPerPage);
+		if($currentPage < 1 || $currentPage > $numPages) $currentPage = 1;
 
 		// remove images that are not shown on this page
 		$files = array_slice($files, $imagesPerPage*($currentPage-1), $imagesPerPage);
@@ -59,24 +62,33 @@
 		global $currentPage, $totalImagesVisible, $imagesPerPage;
 
 		$numPages = ceil($totalImagesVisible / $imagesPerPage);
-		$start = ($currentPage > 4 ? $currentPage-2 : 1);
-		$end = ($currentPage+3 > $numPages ? $numPages : $currentPage+3);
-		$end = ($start == 1 ? 7 : $end);
+		// show max. 5 pages at once
+		// left side abbreviation: appears at page 4+ and is $currentPage-2
+		$left = ($currentPage >= 4 ? $currentPage-2 : 0);
+		// right side abbreviation: appears at page 1+ and is...
+		//	a) 5; if there's no left abbreviation yet
+		//	b) $currentPage+2; if there's already left abbreviation
+		$right = ($left < 1 ? min(5, $numPages+1) : min($currentPage+2, $numPages+1));
+		// left side abbreviation fix: if there's no right side abbreviation anymore, shift left side abbreviation $numPages-4
+		$left = ($right > $numPages ? $numPages-4 : $left);
 
-		for($i = $start; $i <= $end; $i++) {
-			if($i == $start && $start > 1) {
-				echo "<a href='?page=1'>1</a> | ... | ";
-			}
-			if($i == $currentPage) {			
-				echo sprintf("<a href='#' class='current'>%d</a>", $i);
+		for($i = 1; $i <= $numPages; $i++) {
+
+			if($i == $currentPage) {
+				echo sprintf("<a href='' class='current'>%d</a>", $i);
 			} else {
-				if($i < $end || $end == $numPages) {
-					echo sprintf("<a href='?page=%d'>%d</a>", $i, $i);
+				// skip pages left of $left and put "..." at $left				
+				if($i <= $left && $i > 1) {
+					if($i == $left) echo "...";
+				// skip pages right of $right and put "..." at $right
+				} else if($i >= $right && $i < $numPages) {
+					if($i == $right) echo "...";
+				// all the other pages
 				} else {
-					echo sprintf(" ... | <a href='?page=%d'>%d</a>", $numPages, $numPages);
+					echo sprintf("<a href='?page=%d'>%d</a>", $i, $i);
 				}
 			}
-			if($i < $end) echo " | ";
+
 		}
 	}
 

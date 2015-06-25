@@ -1,9 +1,11 @@
 config/*
+!config/README
 images/ads/*
 images/overlays/*
 photos_*/
 photos_*/**
-!images/ads/theboothbrothers.jpg
+!images/ads/theboothbrothers1.jpg
+!images/ads/theboothbrothers2.jpg
 !images/overlays/theboothbrothers.png
 ota/img-l
 ota/img-m
@@ -17,3 +19,9 @@ ota/404.html
 ota/.htpasswd
 ota/hostapd.deny
 ota/dnsmasq.leases
+images/stickers/*
+!images/stickers/theboothbrothers1.png
+!images/stickers/theboothbrothers2.png
+images/intermission/*
+!images/intermission/theboothbrothers1.gif
+!images/intermission/theboothbrothers2.gif
