@@ -180,8 +180,82 @@ function Benchmark() {
 	echo "Total: $benchmark_result sec"
 }
 
+function TestOverlays() {
+	echo "---------------------------------------------------------------------------"
+	echo " Checking configuration file(s)..."
+	echo "---------------------------------------------------------------------------"
+
+	# check if there are actually config files
+	if [[ -z $(ls -A config/*.sh 2>/dev/null) ]]; then
+		echo "Found no configuration files!"
+		echo " - copy 'XuBooth-sample-config.sh' to subfolder 'config'"
+		echo " - rename to <name-of-choice>.sh"
+		echo " - modify settings to your needs"
+		echo
+	fi
+
+	# if there is only 1 file => just use it
+	if [ `ls -1 config/*.sh | wc -l 2> /dev/null` -eq 1 ]; then
+		# read/run the config file
+		config_file=`ls -1 config/*.sh 2> /dev/null`
 
 
+	# else let user choose configuration
+	else
+		let i=0
+		config_files=()
+
+		# collect all config files in array
+		IFSBACKUP=$IFS
+		IFS=$(echo -en "\n\b")
+		for f in `ls config/*.sh | sort -fV`; do
+			let i=$i+1
+			config_files+=($i "$f")
+		done
+		IFS=$IFSBACKUP
+
+		# let user choose the config file
+		choice=$(dialog --title "Choose configuration" --menu "" 20 60 10 "${config_files[@]}" 3>&2 2>&1 1>&3)
+
+		clear
+		echo "---------------------------------------------------------------------------"
+		echo " Checking configuration file(s)..."
+		echo "---------------------------------------------------------------------------"
+
+		# user cancelled
+		if [ -z "$choice" ]; then
+			echo "No configuration selected! Exiting now."
+			read
+		else
+			config_file=${config_files[2*$choice - 1]}
+		fi
+	fi
+
+	# load config
+	echo " * loading $config_file..."
+	echo 
+	source "$config_file"
+
+	# overlay logo over benchmark photo (10 megapixels)
+	echo " * applying overlay to 10MP image..."
+	gm composite -compress jpeg -quality $overlay_jpeg_quality -compose over -gravity $overlay_orientation -geometry $overlay_geometry -dissolve $overlay_opacity_in_percent $overlay_image "images/benchmark/10mp.jpg" "images/benchmark/10mp_overlay_test.jpg"
+	feh -F --hide-pointer --zoom $photo_zoom "images/benchmark/10mp_overlay_test.jpg"
+
+	echo Press \<enter\> to continue...
+	read
+
+	# overlay logo over benchmark photo (18 megapixels)
+	echo " * applying overlay to 18MP image..."
+	gm composite -compress jpeg -quality $overlay_jpeg_quality -compose over -gravity $overlay_orientation -geometry $overlay_geometry -dissolve $overlay_opacity_in_percent $overlay_image "images/benchmark/18mp.jpg" "images/benchmark/18mp_overlay_test.jpg"
+	feh -F --hide-pointer --zoom $photo_zoom "images/benchmark/18mp_overlay_test.jpg"
+
+	echo Press \<enter\> to continue...
+	read
+
+	# delete overlay images
+	rm "images/benchmark/10mp_overlay_test.jpg"
+	rm "images/benchmark/18mp_overlay_test.jpg"
+}
 
 
 
@@ -197,6 +271,7 @@ while [ 1 -gt 0 ]; do
 	menu_entries+=(1 "ListWifiChannels")
 	menu_entries+=(2 "Benchmark")
 	menu_entries+=(3 "RepairXuBooth")
+	menu_entries+=(4 "TestOverlays")
 	menu_entries+=(q "quit")
 	choice=$(dialog --title "Choose the tool you would like to start" --menu "" 20 60 10 "${menu_entries[@]}" 3>&2 2>&1 1>&3)
 

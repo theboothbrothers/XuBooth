@@ -402,19 +402,6 @@
 		ln -s ../$photo_dir/ota-small ota/img-s
 
 		# put customized OTA files in OTA folder
-		cp ./ota-conf/ota-index.php ./ota/index.php
-		sed -i "s#<<<title>>>#$ota_title#g" ./ota/index.php
-		sed -i "s#<<<caption>>>#$ota_caption#g" ./ota/index.php
-		sed -i "s#<<<disclaimer>>>#$ota_disclaimer#g" ./ota/index.php
-		mkdir ./ota/assets/css 2>/dev/null
-		cp ./ota-conf/ota-styles.css ./ota/assets/css/styles.css
-		sed -i "s:<<<body_bgcolor>>>:$ota_body_bgcolor:g" ./ota/assets/css/styles.css
-		sed -i "s:<<<header_bgcolor_1>>>:$ota_header_bgcolor_1:g" ./ota/assets/css/styles.css
-		sed -i "s:<<<header_bgcolor_2>>>:$ota_header_bgcolor_2:g" ./ota/assets/css/styles.css
-		cp ./ota-conf/ota-404.html ./ota/404.html
-		sed -i "s#<<<title>>>#$ota_title#g" ./ota/404.html
-		sed -i "s#<<<caption>>>#$ota_caption#g" ./ota/404.html
-		sed -i "s#<<<domain>>>#$ota_domain#g" ./ota/404.html
 		echo "$ota_management_user:$ota_management_pass" > ./ota/.htpasswd
 		echo "# MAC address filter table" > ./ota/hostapd.deny
 		chmod 666 ./ota/hostapd.deny
@@ -566,6 +553,13 @@ EOF
 	echo "export ota_dev_wlan0=$ota_dev_wlan0" >> XuBooth-tmp-vars.sh
 	echo "export ota_images_per_page=$ota_images_per_page" >> XuBooth-tmp-vars.sh
 	echo "export ota_image_expiration_in_min=$ota_image_expiration_in_min" >> XuBooth-tmp-vars.sh
+	echo "export ota_title=\"$ota_title\"" >> XuBooth-tmp-vars.sh
+	echo "export ota_caption=\"$ota_caption\"" >> XuBooth-tmp-vars.sh
+	echo "export ota_disclaimer=\"$ota_disclaimer\"" >> XuBooth-tmp-vars.sh
+	echo "export ota_domain=\"$ota_domain\"" >> XuBooth-tmp-vars.sh
+	echo "export ota_body_bgcolor=\"$ota_body_bgcolor\"" >> XuBooth-tmp-vars.sh
+	echo "export ota_header_bgcolor_1=\"$ota_header_bgcolor_1\"" >> XuBooth-tmp-vars.sh
+	echo "export ota_header_bgcolor_2=\"$ota_header_bgcolor_2\"" >> XuBooth-tmp-vars.sh
 	echo "export ota_ios_message=\"$ota_ios_message\"" >> XuBooth-tmp-vars.sh
 	echo "export contest_active=\"$contest_active\"" >> XuBooth-tmp-vars.sh
 	echo "export contest_probability_1_over=\"$contest_probability_1_over\"" >> XuBooth-tmp-vars.sh

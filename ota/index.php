@@ -107,13 +107,25 @@
 	// read variables from XuBooth-tmp-vars.sh:
 	//  - ota_images_per_page
 	//  - ota_image_expiration_in_min
+	//  - ota_title
+	//  - ota_caption
+	//  - ota_disclaimer
 	if(file_exists($path . "../XuBooth-tmp-vars.sh")) {
 		$XuBoothTmpVars = file_get_contents($path . "../XuBooth-tmp-vars.sh");
-		preg_match("/export ota_images_per_page=(.*)/", $XuBoothTmpVars, $matches);
-		$imagesPerPage = $matches[1];
-		preg_match("/export ota_image_expiration_in_min=(.*)/", $XuBoothTmpVars, $matches);
-		$expiration = $matches[1];
+	} else {
+		$XuBoothTmpVars = file_get_contents($path . "../XuBooth-sample-config.sh");
 	}
+
+	preg_match("/export ota_images_per_page=(.*)/", $XuBoothTmpVars, $matches);
+	$imagesPerPage = $matches[1];
+	preg_match("/export ota_image_expiration_in_min=(.*)/", $XuBoothTmpVars, $matches);
+	$expiration = $matches[1];
+	preg_match("/export ota_title=\"(.*)\"/", $XuBoothTmpVars, $matches);
+	$title = $matches[1];
+	preg_match("/export ota_caption=\"(.*)\"/", $XuBoothTmpVars, $matches);
+	$caption = $matches[1];
+	preg_match("/export ota_disclaimer=\"(.*)\"/", $XuBoothTmpVars, $matches);
+	$disclaimer = $matches[1];
 
 	// prepare thumbnails for this page to be echo'd later
 	$totalImagesVisible = prepareThumbs();
@@ -126,9 +138,9 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title><<<title>>> | <<<caption>>></title>
+	<title><?php echo $title . " | " . $caption; ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, maximum-scale=1.0" />
-	<link rel="stylesheet" href="assets/css/styles.css" />
+	<link rel="stylesheet" href="assets/css/styles.css.php" />
 	<link rel="stylesheet" href="assets/touchTouch/touchTouch.css" />
 	<style>
 		@font-face {
@@ -147,14 +159,14 @@
 <body>
 
 	<header>
-		<h1><<<title>>></h1>
-		<h2><<<caption>>></h2>
+		<h1><?php echo $title; ?></h1>
+		<h2><?php echo $caption; ?></h2>
 	</header>
 
 	<div id="reload"><a href=""></a></div>
 	
 	<div id="disclaimer">
-		<<<disclaimer>>>
+		<?php echo $disclaimer; ?>
 	</div>
 
 	<div class="thumbs">

@@ -1,6 +1,10 @@
 ########################################################################################################################
-# XuBooth 1.5
+# XuBooth 1.5.1
 ########################################################################################################################
+#  2015-08-15	Tools.sh
+#			- new tool to check a config's overlay settings using the benchmark image files
+#		improved variable handling in OTA (index.php, 404.php and styles.css.php)
+#		stylized OTA management interface (finally looking good)
 #  2015-06-25	THIS IS A HUGE UPDATE
 #		intermission image ("waiting for camera") is customizable for e.g. branding purposes
 #		configurable zoom setting for slideshow (max = max zoom / fill = fill whole screen)

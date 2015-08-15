@@ -1,3 +1,28 @@
+<?php
+	header('Content-type: text/css');
+
+	// save script path
+	$path = dirname(__FILE__) . "/";
+
+	// read variables from XuBooth-tmp-vars.sh:
+	//  - ota_body_bgcolor
+	//  - ota_header_bgcolor_1
+	//  - ota_header_bgcolor_2
+	if(file_exists($path . "../../../XuBooth-tmp-vars.sh")) {
+		$XuBoothTmpVars = file_get_contents($path . "../../../XuBooth-tmp-vars.sh");
+	} else {
+		$XuBoothTmpVars = file_get_contents($path . "../../../XuBooth-sample-config.sh");
+	}
+
+	preg_match("/export ota_body_bgcolor=\"(.*)\"/", $XuBoothTmpVars, $matches);
+	$body_bgcolor = $matches[1];
+	preg_match("/export ota_header_bgcolor_1=\"(.*)\"/", $XuBoothTmpVars, $matches);
+	$header_bgcolor_1 = $matches[1];
+	preg_match("/export ota_header_bgcolor_2=\"(.*)\"/", $XuBoothTmpVars, $matches);
+	$header_bgcolor_2 = $matches[1];
+?>
+
+
 /*-------------------------
 	Simple reset
 --------------------------*/
@@ -15,7 +40,7 @@
 
 
 html{
-	background-color: <<<body_bgcolor>>>;
+	background-color: <?php echo $body_bgcolor; ?>;
 }
 
 
@@ -43,12 +68,12 @@ section, footer, header{
 
 
 header{
-	background-color: <<<header_bgcolor_1>>>;
-	background-image: linear-gradient(top, <<<header_bgcolor_1>>> 0%, <<<header_bgcolor_2>>> 100%);
-	background-image: -o-linear-gradient(top, <<<header_bgcolor_1>>> 0%, <<<header_bgcolor_2>>> 100%);
-	background-image: -moz-linear-gradient(top, <<<header_bgcolor_1>>> 0%, <<<header_bgcolor_2>>> 100%);
-	background-image: -webkit-linear-gradient(top, <<<header_bgcolor_1>>> 0%, <<<header_bgcolor_2>>> 100%);
-	background-image: -ms-linear-gradient(top, <<<header_bgcolor_1>>> 0%, <<<header_bgcolor_2>>> 100%);
+	background-color: <?php echo $header_bgcolor_1; ?>;
+	background-image: linear-gradient(top, <?php echo $header_bgcolor_1; ?> 0%, <?php echo $header_bgcolor_2; ?> 100%);
+	background-image: -o-linear-gradient(top, <?php echo $header_bgcolor_1; ?> 0%, <?php echo $header_bgcolor_2; ?> 100%);
+	background-image: -moz-linear-gradient(top, <?php echo $header_bgcolor_1; ?> 0%, <?php echo $header_bgcolor_2; ?> 100%);
+	background-image: -webkit-linear-gradient(top, <?php echo $header_bgcolor_1; ?> 0%, <?php echo $header_bgcolor_2; ?> 100%);
+	background-image: -ms-linear-gradient(top, <?php echo $header_bgcolor_1; ?> 0%, <?php echo $header_bgcolor_2; ?> 100%);
 	
 	padding:20px;
 	box-shadow:0 2px 4px rgba(0,0,0,0.3);
