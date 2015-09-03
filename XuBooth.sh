@@ -4,7 +4,7 @@
 #  <DEFINITIONS>
 # ----------------------------------------------------------------------
 
-	export require_config_version=7
+	export require_config_version=9
 	export xubooth_config_version=-1
 
 # ----------------------------------------------------------------------
@@ -354,6 +354,11 @@
 		rm XuBooth-tmp-vars.sh 2> /dev/null
 		rm XuBooth.lock 2> /dev/null
 
+		if [ -f XuBooth-picstrip-timeout.pid ]; then		
+			kill $(cat XuBooth-picstrip-timeout.pid) 2> /dev/null
+			rm XuBooth-picstrip-timeout.pid
+		fi
+
 		echo "---------------------------------------------------------------------------"
 		echo " XuBooth exited successfully."
 		echo "---------------------------------------------------------------------------"
@@ -513,6 +518,100 @@ EOF
 	}
 
 
+	# ----------------------------------------------------------------------
+	#  FUNCTION: loop_default_mode
+	# ----------------------------------------------------------------------
+	function loop_default_mode() {
+		# infinite loop (restart gPhoto2 if connection gets interrupted)
+		while [ 1 -gt 0 ]; do
+			# open black background image in fullscreen mode
+			killall eog 2> /dev/null
+			eog -f -w images/black.gif &
+
+			# wait a second
+			sleep 1
+
+			# start slideshow
+			feh -F --hide-pointer --zoom $photo_zoom -D 5 --randomize $photo_dir/*.jpg &
+
+			# start gPhoto2 in tethering mode
+			echo "---------------------------------------------------------------------------"
+			echo " Starting gphoto2 in tethering mode..."
+			echo "---------------------------------------------------------------------------"
+			gphoto2 --quiet --capture-tethered --hook-script=XuBooth-tether-hook.sh --filename="$photo_dir/$filename_prefix-%Y%m%d-%H%M%S.%C" --force-overwrite
+
+			# we get here when the connection was interrupted
+			killall eog 2> /dev/null
+			killall feh 2> /dev/null
+			echo "---------------------------------------------------------------------------"
+			echo  "Lost connection to camera! Waiting for it to come back on..."
+			echo "---------------------------------------------------------------------------"
+			eog -f -w $intermission_image &
+			read -t 5 tmp
+
+			# wait for camera to show up again
+			wait_for_camera
+		done;
+	}
+
+
+	# ----------------------------------------------------------------------
+	#  FUNCTION: loop_picstrip_mode
+	# ----------------------------------------------------------------------
+	function loop_picstrip_mode() {
+		# open black background image in fullscreen mode
+		killall eog 2> /dev/null
+		eog -f -w images/black.gif &
+
+		# start gPhoto2 in tethering mode
+		echo "---------------------------------------------------------------------------"
+		echo " Starting gphoto2 in tethering mode..."
+		echo "---------------------------------------------------------------------------"
+
+		# infinite loop
+		while [ 1 -gt 0 ]; do
+			# start slideshow
+			feh -F --hide-pointer --zoom $photo_zoom -D 5 --randomize $photo_dir/*.jpg &
+
+			# kill the running timeout script for gphoto2 (each PictureStrip starts with a new timeout script)
+			if [ -f XuBooth-picstrip-timeout.pid ]; then
+				kill $(cat XuBooth-picstrip-timeout.pid) 2> /dev/null
+			fi
+
+			# remove indicator file for a finished PictureStrip
+			rm XuBooth-picstrip-finished.yes 2> /dev/null
+
+			# start gphoto2 in tethering mode
+			gphoto2 --quiet --capture-tethered --hook-script=XuBooth-tether-hook-picstrip.sh --filename="$photo_dir/picstrip_%n.%C" --force-overwrite
+
+			killall feh 2> /dev/null
+
+			if [ -f XuBooth-picstrip-timeout.yes ]; then
+				# we get here when the timeout script did its job
+				echo "Timeout! Starting a new PictureStrip..."
+				rm XuBooth-picstrip-timeout.yes 2> /dev/null
+				rm XuBooth-picstrip-timeout.pid 2> /dev/null
+			else
+				if [ ! -f XuBooth-picstrip-finished.yes ]; then
+					# we get here when the connection was interrupted
+					echo "---------------------------------------------------------------------------"
+					echo  "Lost connection to camera! Waiting for it to come back on..."
+					echo "---------------------------------------------------------------------------"
+					killall eog 2> /dev/null					
+					eog -f -w $intermission_image &
+					read -t 5 tmp
+	
+					# wait for camera to show up again
+					wait_for_camera
+
+					# open black background image in fullscreen mode
+					killall eog 2> /dev/null
+					eog -f -w images/black.gif &
+				fi
+			fi
+		done;
+	}
+
 # ----------------------------------------------------------------------
 #  </FUNCTIONS>
 # ----------------------------------------------------------------------
@@ -591,36 +690,18 @@ EOF
 	echo "---------------------------------------------------------------------------"
 	read -t 10 tmp
 
-	# infinite loop (restart gPhoto2 if connection gets interrupted)
-	while [ 1 -gt 0 ]; do
-		# open background image in fullscreen mode
-		killall eog 2> /dev/null
-		eog -f -w images/black.gif &
-
-		# wait a second
-		sleep 1
-
-		# start slideshow
-		feh -F --hide-pointer --zoom $photo_zoom -D 5 --randomize $photo_dir/*.jpg &
-
-		# start gPhoto2 in tethering mode
-		echo "---------------------------------------------------------------------------"
-		echo " Starting gphoto2 in tethering mode..."
-		echo "---------------------------------------------------------------------------"
-		gphoto2 --quiet --capture-tethered --hook-script=XuBooth-tether-hook.sh --filename="$photo_dir/$filename_prefix-%Y%m%d-%H%M%S.%C" --force-overwrite
-
-		# we get here when the connection was interrupted
-		killall eog 2> /dev/null
-		killall feh 2> /dev/null
-		echo "---------------------------------------------------------------------------"
-		echo  "Lost connection to camera! Waiting for it to come back on..."
-		echo "---------------------------------------------------------------------------"
-		eog -f -w $intermission_image &
-		read -t 5 tmp
-
-		# wait for camera to show up again
-		wait_for_camera
-	done;
+	# choose how to proceed based on shooting mode
+	case "$shooting_mode" in
+		"default")
+			loop_default_mode
+			;;
+		"picstrip")
+			loop_picstrip_mode
+			;;
+		*)
+			echo "No valid shooting mode selected in config file! Stopping here!"
+			read
+	esac
 
 	# run the cleanup
 	cleanup

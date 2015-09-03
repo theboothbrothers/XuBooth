@@ -1,6 +1,9 @@
 ########################################################################################################################
-# XuBooth 1.5.1
+# XuBooth 1.6
 ########################################################################################################################
+#  2015-09-03	introduced PictureStrip mode
+#			- capture $n images and place them at given coordinates within a template file
+#			- configuration as usual via config file
 #  2015-08-15	Tools.sh
 #			- new tool to check a config's overlay settings using the benchmark image files
 #		improved variable handling in OTA (index.php, 404.php and styles.css.php)

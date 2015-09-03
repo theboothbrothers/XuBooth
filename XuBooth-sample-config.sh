@@ -3,7 +3,7 @@
 #
 # PLEASE DO NOT CHANGE THE FOLLOWING LINE UNLESS YOU KNOW WHAT YOU'RE DOING
 #
-export xubooth_config_version=7
+export xubooth_config_version=9
 
 
 
@@ -14,7 +14,10 @@ export filename_prefix=theboothbrothers
 export show_photo_in_sec="120"
 export slideshow_interval_in_sec="10"
 export photo_zoom=max
+#export photo_zoom=fill
 export intermission_image="images/intermission/theboothbrothers1.gif"
+export shooting_mode=default
+#export shooting_mode=picstrip
 
 # -----------------------------------
 # Overlay Logo
@@ -37,6 +40,18 @@ export contest_sticker_opacity_in_percent="100"
 export contest_sticker_orientation="SouthWest"
 export contest_sticker_geometry="x450+100+75"
 export contest_sticker_jpeg_quality="80"
+
+# -----------------------------------
+# PictureStrip Mode
+# -----------------------------------
+export picstrip_timeout_in_sec="300"
+export picstrip_template="images/picstrip/theboothbrothers.jpg"
+export picstrip_images="4"
+export picstrip_quality="80"
+export picstrip_geometry_1="689x459!+70+70"
+export picstrip_geometry_2="689x459!+834+70"
+export picstrip_geometry_3="689x459!+1597+70"
+export picstrip_geometry_4="1457x971!+829+598"
 
 # -----------------------------------
 # EXIF Data
