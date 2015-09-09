@@ -79,7 +79,7 @@ function downloadImage() {
 				gm convert "$photo_dir/$filename_new" -thumbnail x$ota_image_height -unsharp 0x.5 -bordercolor $ota_image_border_color -border $ota_image_border_size -flatten "$photo_dir/ota-medium/$filename_new"
 
 				# large sized version
-				gm convert "$photo_dir/$filename_new" -thumbnail x$ota_image_height_download -unsharp 0x.5 -flatten "$photo_dir/ota-large/$filename_new"
+				gm convert "$photo_dir/$filename_new" x$ota_image_height_download -unsharp 0x.5 -flatten "$photo_dir/ota-large/$filename_new"
 			fi
 
 			;;
