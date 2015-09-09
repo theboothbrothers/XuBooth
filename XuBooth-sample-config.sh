@@ -20,6 +20,18 @@ export shooting_mode=default
 #export shooting_mode=picstrip
 
 # -----------------------------------
+# PictureStrip Mode
+# -----------------------------------
+export picstrip_timeout_in_sec="300"
+export picstrip_template="images/picstrip/theboothbrothers.jpg"
+export picstrip_images="4"
+export picstrip_quality="80"
+export picstrip_geometry_1="689x459!+70+70"
+export picstrip_geometry_2="689x459!+834+70"
+export picstrip_geometry_3="689x459!+1597+70"
+export picstrip_geometry_4="1457x971!+829+598"
+
+# -----------------------------------
 # Overlay Logo
 # -----------------------------------
 export overlay_active=1
@@ -42,21 +54,9 @@ export contest_sticker_geometry="x450+100+75"
 export contest_sticker_jpeg_quality="80"
 
 # -----------------------------------
-# PictureStrip Mode
-# -----------------------------------
-export picstrip_timeout_in_sec="300"
-export picstrip_template="images/picstrip/theboothbrothers.jpg"
-export picstrip_images="4"
-export picstrip_quality="80"
-export picstrip_geometry_1="689x459!+70+70"
-export picstrip_geometry_2="689x459!+834+70"
-export picstrip_geometry_3="689x459!+1597+70"
-export picstrip_geometry_4="1457x971!+829+598"
-
-# -----------------------------------
 # EXIF Data
 # -----------------------------------
-export exif_active=0
+export exif_active=1
 export exif_credit="The Booth Brothers"
 export exif_copyright="(c) The Booth Brothers"
 
@@ -78,7 +78,9 @@ export ota_active=0
 	export ota_title="Over-The-Air"
 	export ota_caption="Your Photobooth Gallery"
 	export ota_disclaimer="<b>Please note</b>: there is <b><u>no public access</u></b> to the internet in this wifi. Please disconnect from this wifi when finished downloading. Otherwise you won't be able to surf the internet and share your images online."
+#	export ota_disclaimer="<b>Achtung</b>: Dieses WLAN bietet <b><u>keinen Zugriff</u></b> ins öffentliche Internet. Bitte trennen Sie die Verbindung nach dem Download. Anderenfalls werden Sie nicht online surfen können."
 	export ota_ios_message="How do I save? Long-press on the following image."
+#	export ota_ios_message="Wie speichere ich? Langes Drücken auf das folgende Bild!"
 	export ota_body_bgcolor="#7f2a41"
 	export ota_header_bgcolor_1="#ffffff"
 	export ota_header_bgcolor_2="#ededed"

@@ -23,21 +23,30 @@ function downloadImage() {
 	timestamp=$(date "+%Y%m%d-%H%M%S")
 	filename_new="$filename_prefix-$timestamp.jpg"
 
-	# kill current slideshow
-	killall feh 2> /dev/null
-
 	# process first, last and intermediate photos differently
 	case $count in
-		# process last photo
+		# process last photo (or 1st photo if $picstrip_images = 1)
 		$picstrip_images)
-			# composite image into intermediate output
-			gm composite -compress jpeg -quality $picstrip_quality -compose over -geometry ${!geo} "$argument" "$photo_dir/picstrip.tmp" "$photo_dir/picstrip.tmp"
+			
+			if [ $picstrip_images -gt 1 ]; then
+				# composite image into intermediate output
+				gm composite -compress jpeg -quality $picstrip_quality -compose over -geometry ${!geo} "$argument" "$photo_dir/picstrip.tmp" "$photo_dir/picstrip.tmp"
+			else
+				# composite first image into template
+				gm composite -compress jpeg -quality 100 -compose over -geometry ${!geo} "$argument" "$photo_dir/../$picstrip_template" "$photo_dir/picstrip.tmp"
+			fi
 
 			# move original photo to SOOC folder
 			mv "$argument" "$photo_dir/sooc/$filename_new"
 
 			# make intermediate output the final image
 			mv "$photo_dir/picstrip.tmp" "$photo_dir/$filename_new"
+
+			# overlay logo over image
+			if [ $overlay_active -eq 1 ]; then
+				# overlay logo over photo
+				gm composite -compress jpeg -quality $overlay_jpeg_quality -compose over -gravity $overlay_orientation -geometry $overlay_geometry -dissolve $overlay_opacity_in_percent $photo_dir/../$overlay_image "$photo_dir/$filename_new" "$photo_dir/$filename_new"
+			fi
 
 			# set indicator file for a finished PictureStrip
 			touch XuBooth-picstrip-finished.yes
@@ -74,7 +83,7 @@ function downloadImage() {
 			fi
 
 			;;
-		# process first photo
+		# process first photo (only if $picstrip_images >= 2)
 		1)
 			# start timeout script for gphoto2 in the background and store its PID
 			( sleep $picstrip_timeout_in_sec; touch XuBooth-picstrip-timeout.yes; killall gphoto2) & echo $! > XuBooth-picstrip-timeout.pid
@@ -90,9 +99,10 @@ function downloadImage() {
 
 			# move original photo to SOOC folder
 			mv "$argument" "$photo_dir/sooc/$filename_new"
+
 			;;
 
-		# process intermediate photo
+		# process intermediate photo (only if $picstrip_images >= 2)
 		*)
 			# composite image into intermediate output
 			gm composite -compress jpeg -quality 100 -compose over -geometry ${!geo} "$argument" "$photo_dir/picstrip.tmp" "$photo_dir/picstrip.tmp"

@@ -527,11 +527,13 @@ EOF
 			# open black background image in fullscreen mode
 			killall eog 2> /dev/null
 			eog -f -w images/black.gif &
+			sleep 0.5
 
 			# wait a second
 			sleep 1
 
 			# start slideshow
+			killall feh 2> /dev/null
 			feh -F --hide-pointer --zoom $photo_zoom -D 5 --randomize $photo_dir/*.jpg &
 
 			# start gPhoto2 in tethering mode
@@ -547,7 +549,7 @@ EOF
 			echo  "Lost connection to camera! Waiting for it to come back on..."
 			echo "---------------------------------------------------------------------------"
 			eog -f -w $intermission_image &
-			read -t 5 tmp
+			sleep 5
 
 			# wait for camera to show up again
 			wait_for_camera
@@ -562,17 +564,19 @@ EOF
 		# open black background image in fullscreen mode
 		killall eog 2> /dev/null
 		eog -f -w images/black.gif &
+		sleep 0.5
 
 		# start gPhoto2 in tethering mode
 		echo "---------------------------------------------------------------------------"
 		echo " Starting gphoto2 in tethering mode..."
 		echo "---------------------------------------------------------------------------"
 
+		# start slideshow
+		killall feh 2> /dev/null
+		feh -F --hide-pointer --zoom $photo_zoom -D 5 --randomize $photo_dir/*.jpg &
+
 		# infinite loop
 		while [ 1 -gt 0 ]; do
-			# start slideshow
-			feh -F --hide-pointer --zoom $photo_zoom -D 5 --randomize $photo_dir/*.jpg &
-
 			# kill the running timeout script for gphoto2 (each PictureStrip starts with a new timeout script)
 			if [ -f XuBooth-picstrip-timeout.pid ]; then
 				kill $(cat XuBooth-picstrip-timeout.pid) 2> /dev/null
@@ -584,22 +588,25 @@ EOF
 			# start gphoto2 in tethering mode
 			gphoto2 --quiet --capture-tethered --hook-script=XuBooth-tether-hook-picstrip.sh --filename="$photo_dir/picstrip_%n.%C" --force-overwrite
 
-			killall feh 2> /dev/null
-
 			if [ -f XuBooth-picstrip-timeout.yes ]; then
 				# we get here when the timeout script did its job
 				echo "Timeout! Starting a new PictureStrip..."
 				rm XuBooth-picstrip-timeout.yes 2> /dev/null
 				rm XuBooth-picstrip-timeout.pid 2> /dev/null
+
+				# start slideshow
+				killall feh 2> /dev/null
+				feh -F --hide-pointer --zoom $photo_zoom -D 5 --randomize $photo_dir/*.jpg &
 			else
 				if [ ! -f XuBooth-picstrip-finished.yes ]; then
 					# we get here when the connection was interrupted
 					echo "---------------------------------------------------------------------------"
 					echo  "Lost connection to camera! Waiting for it to come back on..."
 					echo "---------------------------------------------------------------------------"
-					killall eog 2> /dev/null					
+					killall eog 2> /dev/null
+					killall feh 2> /dev/null
 					eog -f -w $intermission_image &
-					read -t 5 tmp
+					sleep 5
 	
 					# wait for camera to show up again
 					wait_for_camera
@@ -607,6 +614,11 @@ EOF
 					# open black background image in fullscreen mode
 					killall eog 2> /dev/null
 					eog -f -w images/black.gif &
+					sleep 0.5
+
+					# start slideshow
+					killall feh 2> /dev/null
+					feh -F --hide-pointer --zoom $photo_zoom -D 5 --randomize $photo_dir/*.jpg &
 				fi
 			fi
 		done;

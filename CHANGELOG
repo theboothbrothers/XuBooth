@@ -1,6 +1,11 @@
 ########################################################################################################################
 # XuBooth 1.6
 ########################################################################################################################
+#  2015-09-09	PictureStrip mode
+#			- some minor bugfixes
+#			- overlay mode for final image
+#		Overlay mode
+#			- overlay now created BEFORE slideshow starts (takes a bit longer but no scratching heads anymore)
 #  2015-09-03	introduced PictureStrip mode
 #			- capture $n images and place them at given coordinates within a template file
 #			- configuration as usual via config file

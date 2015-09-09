@@ -78,6 +78,12 @@ function downloadImage() {
 		fi
 	fi
 
+	# overlay logo over each image
+	if [ $overlay_active -eq 1 ]; then
+		# overlay logo over current photo
+		gm composite -compress jpeg -quality $overlay_jpeg_quality -compose over -gravity $overlay_orientation -geometry $overlay_geometry -dissolve $overlay_opacity_in_percent $photo_dir/../$overlay_image "$argument" "$argument"
+	fi
+
 	# kill current slideshow
 	killall feh 2> /dev/null
 
@@ -92,12 +98,6 @@ function downloadImage() {
 	if [ $exif_active -eq 1 ]; then
 		# remove ALL EXIF/IPTC data from photo and set user-defined EXIF data
 		exiftool -r -overwrite_original -P -all= -Artist="$exif_credit" -XPAuthor="$exif_credit" -OwnerName="$exif_credit" -Credit="$exif_credit" -Copyright="$exif_copyright" -CopyrightNotice="$exif_copyright" -UserComment="$exif_contact" -Contact="$exif_contact" "$argument"
-	fi
-
-	# overlay logo over each image
-	if [ $overlay_active -eq 1 ]; then
-		# overlay logo over current photo
-		gm composite -compress jpeg -quality $overlay_jpeg_quality -compose over -gravity $overlay_orientation -geometry $overlay_geometry -dissolve $overlay_opacity_in_percent $photo_dir/../$overlay_image "$argument" "$argument"
 	fi
 
 	# OTA small/medium/large sized files creation
