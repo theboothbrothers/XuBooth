@@ -413,9 +413,11 @@
 		echo "# dnsmasq leases" > ./ota/dnsmasq.leases
 		chmod 666 ./ota/dnsmasq.leases
 
-		# create download stats file and give write permissions to "others"
-		echo "Date;IP;User-Agent;File" > $photo_dir/download_stats.csv
-		chmod 777 $photo_dir/download_stats.csv
+		# create download stats file and give write permissions to "others" (skip if the file already exists)
+		if [ ! -f $photo_dir/download_stats.csv ]; then
+			echo "Date;IP;User-Agent;File" > $photo_dir/download_stats.csv
+			chmod 777 $photo_dir/download_stats.csv
+		fi
 
 		# save original config files
 		cp /etc/default/hostapd ./ota-conf/hostapd.orig

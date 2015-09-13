@@ -399,7 +399,7 @@ function checkGET() {
 				$i = 0;
 				foreach($stats_by_file as $file => $count) {
 					$i++;
-					echo sprintf("<tr><td>#%d</td><td>%d</td><td><a href='img-m/%s' target='_new'>%s</a></td></li>", $i, $file, $count, $file);
+					echo sprintf("<tr><td>#%d</td><td>%d</td><td><a href='img-m/%s' target='_new'>%s</a></td></li>", $i, $count, $file, $file);
 				}
 			?>
 			</table></div>
