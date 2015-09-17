@@ -21,6 +21,7 @@ ota/img-m
 ota/img-s
 ota-conf/*.orig
 ota-ssh-keys/*
+!ota-ssh-keys/README
 !ota-ssh-keys/theboothbrothers
 !ota-ssh-keys/theboothbrothers.pub
 photos_*/

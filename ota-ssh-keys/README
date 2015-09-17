@@ -1,0 +1,8 @@
+This folder contains public/private keys for SSH connections to DD-WRT routers.
+
+--------------------------------------------
+SECURITY NOTE
+--------------------------------------------
+ - PLEASE CREATE A UNIQUE KEY-PAIR USING Tools.sh
+ - ONLY use the default keys (theboothbrothers[.pub]) for TESTING PURPOSES
+ - using the default keys is INSECURE and will let ANYONE GAIN ACCESS TO YOUR ROUTER

@@ -1,6 +1,7 @@
 ########################################################################################################################
-# XuBooth 1.7
+# XuBooth 1.7.1
 ########################################################################################################################
+#  2015-09-17	added security notice for SSH keys (just in case...)
 #  2015-09-16	OTA: added support for DD-WRT routers
 #			- XuBooth needs an SSH key to remotely manage the OTA settings on the router
 #			- create SSH key using Tools.sh (use the provided one ONLY for testing purposes)
