@@ -4,6 +4,22 @@ function quit() {
 	exit 0
 }
 
+function CreateSshKey() {
+	# ask for keyname
+	echo "Enter keyname: "
+	read filename
+
+	# create key
+	ssh-keygen -q -t rsa -b 4096 -N "" -C "XuBooth's DD-WRT Key" -f "ota-ssh-keys/$filename"
+
+	# show usage
+	echo ""
+	echo " > key created in: ""ota-ssh-keys/$filename"""
+	echo " > copy the following text into the ""AuthorizedKeys"" field in DD-WRT's Web-Interface:"
+	echo ""
+	cat "ota-ssh-keys/$filename.pub"
+}
+
 function recoverOTA() {
 	# if OTA is not activated, skip this function
 	if [ $ota_active -ne 1 ]; then return; fi
@@ -20,22 +36,28 @@ sudo bash <<"EOF"
 	echo  $config_file
 	read
 
-	# shutdown wlan interface
-	ifdown $ota_dev_wlan0
+	if [ "$ota_device" == "USB" ]; then
+		# shutdown wlan interface
+		ifdown $ota_dev_wlan0
+
+		# restore original config files
+		cp ./ota-conf/hostapd.orig /etc/default/hostapd
+		cp ./ota-conf/dnsmasq.conf.orig /etc/dnsmasq.conf
+		cp ./ota-conf/interfaces.orig /etc/network/interfaces
+
+		# restart Network Manager
+		service network-manager restart
+
+		# reload wlan interface
+		ifdown $ota_dev_wlan0
+		ifup $ota_dev_wlan0
+	fi
 
 	# restore original config files
-	cp ./ota-conf/hostapd.orig /etc/default/hostapd
-	cp ./ota-conf/dnsmasq.conf.orig /etc/dnsmasq.conf
-	cp ./ota-conf/interfaces.orig /etc/network/interfaces
 	cp ./ota-conf/lighttpd.conf.orig /etc/lighttpd/lighttpd.conf
 
-	# restart Network Manager and ligHTTPd
-	service network-manager restart
+	# restart ligHTTPd
 	service lighttpd restart
-
-	# reload wlan interface
-	ifdown $ota_dev_wlan0
-	ifup $ota_dev_wlan0
 EOF
 
 	# delete stored original config files
@@ -272,6 +294,7 @@ while [ 1 -gt 0 ]; do
 	menu_entries+=(2 "Benchmark")
 	menu_entries+=(3 "RepairXuBooth")
 	menu_entries+=(4 "TestOverlays")
+	menu_entries+=(5 "CreateSshKey")
 	menu_entries+=(q "quit")
 	choice=$(dialog --title "Choose the tool you would like to start" --menu "" 20 60 10 "${menu_entries[@]}" 3>&2 2>&1 1>&3)
 

@@ -3,7 +3,7 @@
 #
 # PLEASE DO NOT CHANGE THE FOLLOWING LINE UNLESS YOU KNOW WHAT YOU'RE DOING
 #
-export xubooth_config_version=9
+export xubooth_config_version=10
 
 
 
@@ -66,11 +66,20 @@ export exif_copyright="(c) The Booth Brothers"
 export ota_active=0
 
 	# OTA AccessPoint
-	export ota_dhcp_lease_in_min=10
-	export ota_wlan_driver=nl80211
-	export ota_wlan_channel=13
+	export ota_dhcp_lease_in_min=1440
 	export ota_wlan_ssid="PhotoBooth"
 	export ota_wlan_pass="thepassword"
+	export ota_device=ddwrt
+#	export ota_device=usb
+
+	# OTA AccessPoint (DD-WRT Router)
+	export ota_ddwrt_ip=192.168.1.1
+	export ota_ddwrt_ssh_port=2531
+	export ota_ddwrt_ssh_keyfile=ota-ssh-keys/theboothbrothers
+
+	# OTA AccessPoint (USB Wifi)
+	export ota_wlan_driver=nl80211
+	export ota_wlan_channel=13
 	export ota_wlan_country_code=DE
 
 	# OTA Branding

@@ -4,7 +4,7 @@
 #  <DEFINITIONS>
 # ----------------------------------------------------------------------
 
-	export require_config_version=9
+	export require_config_version=10
 	export xubooth_config_version=-1
 
 # ----------------------------------------------------------------------
@@ -156,6 +156,9 @@
 		# if OTA is not activated, skip this function
 		if [ $ota_active -ne 1 ]; then return; fi
 
+		# if OTA is not using a USB device, skip this function
+		if [ "$ota_device" != "USB" ]; then return; fi
+
 		let i=0
 		lan_devices=()
 
@@ -201,6 +204,9 @@
 
 		# if OTA is not activated, skip this function
 		if [ $ota_active -ne 1 ]; then return; fi
+
+		# if OTA is not using a USB device, skip this function
+		if [ "$ota_device" != "USB" ]; then return; fi
 
 		let i=0
 		wlan_devices=()
@@ -420,9 +426,11 @@
 		fi
 
 		# save original config files
-		cp /etc/default/hostapd ./ota-conf/hostapd.orig
-		cp /etc/dnsmasq.conf ./ota-conf/dnsmasq.conf.orig
-		cp /etc/network/interfaces ./ota-conf/interfaces.orig
+		if [ "$ota_device" == "USB" ]; then
+			cp /etc/default/hostapd ./ota-conf/hostapd.orig
+			cp /etc/dnsmasq.conf ./ota-conf/dnsmasq.conf.orig
+			cp /etc/network/interfaces ./ota-conf/interfaces.orig
+		fi
 		cp /etc/lighttpd/lighttpd.conf ./ota-conf/lighttpd.conf.orig
 
 		# ----------------------------------------------------
@@ -435,38 +443,101 @@ sudo bash <<"EOF"
 		source XuBooth-tmp-vars.sh
 		source "$config_file"
 
-		# put our config files into place and replace placeholders
-		cp ./ota-conf/dnsmasq.conf /etc/dnsmasq.conf
-		sed -i "s:<<<dev_wlan0>>>:$ota_dev_wlan0:g" /etc/dnsmasq.conf
-		sed -i "s:<<<dev_eth0>>>:$ota_dev_eth0:g" /etc/dnsmasq.conf
-		sed -i "s:<<<dhcp_lease_in_min>>>:$ota_dhcp_lease_in_min:g" /etc/dnsmasq.conf
-		sed -i "s:<<<xubooth_dir>>>:$script_path:g" /etc/dnsmasq.conf
+		if [ "$ota_device" == "USB" ]; then
+			# put our config files into place and replace placeholders
+			cp ./ota-conf/dnsmasq.conf /etc/dnsmasq.conf
+			sed -i "s:<<<dev_wlan0>>>:$ota_dev_wlan0:g" /etc/dnsmasq.conf
+			sed -i "s:<<<dev_eth0>>>:$ota_dev_eth0:g" /etc/dnsmasq.conf
+			sed -i "s:<<<dhcp_lease_in_min>>>:$ota_dhcp_lease_in_min:g" /etc/dnsmasq.conf
+			sed -i "s:<<<xubooth_dir>>>:$script_path:g" /etc/dnsmasq.conf
 
-		cp ./ota-conf/hostapd.conf /etc/hostapd.conf
-		sed -i "s:<<<dev_wlan0>>>:$ota_dev_wlan0:g" /etc/hostapd.conf
-		sed -i "s:<<<wlan_driver>>>:$ota_wlan_driver:g" /etc/hostapd.conf
-		sed -i "s:<<<wlan_channel>>>:$ota_wlan_channel:g" /etc/hostapd.conf
-		sed -i "s:<<<wlan_ssid>>>:$ota_wlan_ssid:g" /etc/hostapd.conf
-		sed -i "s:<<<wlan_pass>>>:$ota_wlan_pass:g" /etc/hostapd.conf
-		sed -i "s:<<<wlan_country_code>>>:$ota_wlan_country_code:g" /etc/hostapd.conf
-		sed -i "s:<<<xubooth_dir>>>:$script_path:g" /etc/hostapd.conf
-		echo "DAEMON_CONF=/etc/hostapd.conf" > /etc/default/hostapd
+			cp ./ota-conf/hostapd.conf /etc/hostapd.conf
+			sed -i "s:<<<dev_wlan0>>>:$ota_dev_wlan0:g" /etc/hostapd.conf
+			sed -i "s:<<<wlan_driver>>>:$ota_wlan_driver:g" /etc/hostapd.conf
+			sed -i "s:<<<wlan_channel>>>:$ota_wlan_channel:g" /etc/hostapd.conf
+			sed -i "s:<<<wlan_ssid>>>:$ota_wlan_ssid:g" /etc/hostapd.conf
+			sed -i "s:<<<wlan_pass>>>:$ota_wlan_pass:g" /etc/hostapd.conf
+			sed -i "s:<<<wlan_country_code>>>:$ota_wlan_country_code:g" /etc/hostapd.conf
+			sed -i "s:<<<xubooth_dir>>>:$script_path:g" /etc/hostapd.conf
+			echo "DAEMON_CONF=/etc/hostapd.conf" > /etc/default/hostapd
 
-		cp ./ota-conf/interfaces /etc/network/interfaces
-		sed -i "s:<<<dev_wlan0>>>:$ota_dev_wlan0:g" /etc/network/interfaces
-		sed -i "s:<<<dev_eth0>>>:$ota_dev_eth0:g" /etc/network/interfaces
+			cp ./ota-conf/interfaces /etc/network/interfaces
+			sed -i "s:<<<dev_wlan0>>>:$ota_dev_wlan0:g" /etc/network/interfaces
+			sed -i "s:<<<dev_eth0>>>:$ota_dev_eth0:g" /etc/network/interfaces
+
+			# restart Network Manager
+			service network-manager restart
+
+			# reload wlan interface
+			ifdown $ota_dev_wlan0
+			ifup $ota_dev_wlan0
+		else
+			# retrieve current IP we get from the DD-WRT router
+			this_ip=`hostname -I | cut -f1 -d' '`
+
+			# create temporary script for DD-WRT
+			echo '
+				# get wifi device name
+				dev_wlan=`nvram get wl0_ifname`
+
+				# configure dnsmasq
+				cp /tmp/dnsmasq.conf /tmp/xubooth_dnsmasq.conf
+				sed -i "s/^.*dhcp-range=.*$//" /tmp/xubooth_dnsmasq.conf
+				sed -i "s/^.*dhcp-lease-max=.*$//" /tmp/xubooth_dnsmasq.conf
+				sed -i "s/^.*dhcp-leasefile=.*$//" /tmp/xubooth_dnsmasq.conf
+				sed -i "s/^.*address=.*$//" /tmp/xubooth_dnsmasq.conf
+				echo "dhcp-range=lan,192.168.1.20,192.168.1.250,<<<dhcp_lease>>>m" >> /tmp/xubooth_dnsmasq.conf
+				echo "dhcp-lease-max=230" >> /tmp/xubooth_dnsmasq.conf
+				echo "dhcp-leasefile=/tmp/xubooth_dnsmasq.leases" >> /tmp/xubooth_dnsmasq.conf
+				echo "address=/#/<<<this_ip>>>" >> /tmp/xubooth_dnsmasq.conf
+
+				# configure hostapd
+				cp /tmp/${dev_wlan}_hostap.conf /tmp/xubooth_hostapd.conf
+				sed -i "s/^.*ssid=.*$//" /tmp/xubooth_hostapd.conf
+				sed -i "s/^.*wpa_passphrase=.*$//" /tmp/xubooth_hostapd.conf
+				sed -i "s/^.*wpa=.*$//" /tmp/xubooth_hostapd.conf
+				sed -i "s/^.*auth_algs=.*$//" /tmp/xubooth_hostapd.conf
+				sed -i "s/^.*hw_mode=.*$//" /tmp/xubooth_hostapd.conf
+				echo "ssid=<<<wlan_ssid>>>" >> /tmp/xubooth_hostapd.conf
+				echo "wpa_passphrase=<<<wlan_pass>>>" >> /tmp/xubooth_hostapd.conf
+				echo "wpa=2" >> /tmp/xubooth_hostapd.conf
+				echo "auth_algs=1" >> /tmp/xubooth_hostapd.conf
+				echo "hw_mode=g" >> /tmp/xubooth_hostapd.conf
+
+				# kill dnsmasq and hostapd
+				killall dnsmasq
+				killall hostapd
+
+				sleep 3
+
+				# restart dnsmasq and hostapd
+				dnsmasq -u root -g root --conf-file=/tmp/xubooth_dnsmasq.conf
+				hostapd -B -P /var/run/${dev_wlan}_hostapd.pid /tmp/xubooth_hostapd.conf
+
+			' > XuBooth-tmp-ddwrt.sh
+
+			# replace placeholders in temporary script
+			sed -i "s:<<<dhcp_lease>>>:$ota_dhcp_lease_in_min:g" XuBooth-tmp-ddwrt.sh
+			sed -i "s:<<<this_ip>>>:$this_ip:g" XuBooth-tmp-ddwrt.sh
+			sed -i "s:<<<wlan_ssid>>>:$ota_wlan_ssid:g" XuBooth-tmp-ddwrt.sh
+			sed -i "s:<<<wlan_pass>>>:$ota_wlan_pass:g" XuBooth-tmp-ddwrt.sh
+
+			# set correct permissions on keyfile
+			chmod 600 $ota_ddwrt_ssh_keyfile
+
+			# run temporary script on DD-WRT router (ignore HostKey)
+			ssh -o StrictHostKeyChecking=no -p $ota_ddwrt_ssh_port -i $ota_ddwrt_ssh_keyfile root@$ota_ddwrt_ip 'sh -s' < XuBooth-tmp-ddwrt.sh
+
+			# delete temporary script
+			rm XuBooth-tmp-ddwrt.sh
+		fi
 
 		cp ./ota-conf/lighttpd.conf /etc/lighttpd/lighttpd.conf
 		sed -i "s:<<<xubooth_dir>>>:$script_path:g" /etc/lighttpd/lighttpd.conf
 		sed -i "s#<<<domain>>>#$ota_domain#g" /etc/lighttpd/lighttpd.conf
 
-		# restart Network Manager and ligHTTPd
-		service network-manager restart
+		# restart ligHTTPd
 		service lighttpd restart
-
-		# reload wlan interface
-		ifdown $ota_dev_wlan0
-		ifup $ota_dev_wlan0
 EOF
 
 		echo
@@ -494,28 +565,59 @@ sudo bash <<"EOF"
 		source XuBooth-tmp-vars.sh
 		source "$config_file"
 
-		# shutdown wlan interface
-		ifdown $ota_dev_wlan0
+		if [ "$ota_device" == "USB" ]; then
+			# restore original config files
+			cp ./ota-conf/hostapd.orig /etc/default/hostapd
+			cp ./ota-conf/dnsmasq.conf.orig /etc/dnsmasq.conf
+			cp ./ota-conf/interfaces.orig /etc/network/interfaces
+
+			# restart Network Manager
+			service network-manager restart
+
+			# reload wlan interface
+			ifdown $ota_dev_wlan0
+			ifup $ota_dev_wlan0
+		else
+			# create temporary script for DD-WRT
+			echo '
+				# get wifi device name
+				dev_wlan=`nvram get wl0_ifname`
+
+				# kill dnsmasq and hostapd
+				killall dnsmasq
+				killall hostapd
+
+				sleep 3
+
+				# restart dnsmasq and hostapd
+				dnsmasq -u root -g root --conf-file=/tmp/dnsmasq.conf
+				hostapd -B -P /var/run/${dev_wlan}_hostapd.pid /tmp/${dev_wlan}_hostapd.conf
+
+			' > XuBooth-tmp-ddwrt.sh
+
+			# set correct permissions on keyfile
+			chmod 600 $ota_ddwrt_ssh_keyfile
+
+			# run temporary script on DD-WRT router (ignore HostKey)
+			ssh -o StrictHostKeyChecking=no -p $ota_ddwrt_ssh_port -i $ota_ddwrt_ssh_keyfile root@$ota_ddwrt_ip 'sh -s' < XuBooth-tmp-ddwrt.sh
+
+			# delete temporary script
+			rm XuBooth-tmp-ddwrt.sh
+		fi
 
 		# restore original config files
-		cp ./ota-conf/hostapd.orig /etc/default/hostapd
-		cp ./ota-conf/dnsmasq.conf.orig /etc/dnsmasq.conf
-		cp ./ota-conf/interfaces.orig /etc/network/interfaces
 		cp ./ota-conf/lighttpd.conf.orig /etc/lighttpd/lighttpd.conf
 
-		# restart Network Manager and ligHTTPd
-		service network-manager restart
+		# restart ligHTTPd
 		service lighttpd restart
-
-		# reload wlan interface
-		ifdown $ota_dev_wlan0
-		ifup $ota_dev_wlan0
 EOF
 
 		# delete stored original config files
-		rm ./ota-conf/hostapd.orig
-		rm ./ota-conf/dnsmasq.conf.orig
-		rm ./ota-conf/interfaces.orig
+		if [ "$ota_device" == "USB" ]; then
+			rm ./ota-conf/hostapd.orig
+			rm ./ota-conf/dnsmasq.conf.orig
+			rm ./ota-conf/interfaces.orig
+		fi
 		rm ./ota-conf/lighttpd.conf.orig
 	}
 

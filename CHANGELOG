@@ -1,6 +1,22 @@
 ########################################################################################################################
-# XuBooth 1.6.3
+# XuBooth 1.7
 ########################################################################################################################
+#  2015-09-16	OTA: added support for DD-WRT routers
+#			- XuBooth needs an SSH key to remotely manage the OTA settings on the router
+#			- create SSH key using Tools.sh (use the provided one ONLY for testing purposes)
+#			- configure the DD-WRT router like this...
+#			- "Services > Secure Shell"
+#				- SSHd				= enable
+#				- Password Login		= disable
+#				- Port 				= <choose a random number greater 1000>
+#				- Authorized Keys		= <your public key>
+#			- "Administration > Web Access"
+#				- Info Site Password Protection	= enabled
+#			- "Administration > Remote Access"
+#				- SSH Management		= enable
+#				- SSH Remote Port		= <same port number as above>
+#			- reboot the router to activate changes
+#			- XuBooth will now be able to remotely manage the router and set all necessary Wifi settings
 #  2015-09-13	FIX: incorrect counting in OTA Management "Top10 Downloads"
 #		FIX: download statistics were overwritten when a photo folder was re-used
 #  2015-09-09	PictureStrip mode
