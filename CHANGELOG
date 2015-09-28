@@ -1,6 +1,13 @@
 ########################################################################################################################
-# XuBooth 1.7.1
+# XuBooth 1.8
 ########################################################################################################################
+#  2015-09-28	introduced Disclaimer mode
+#			- useful for public events where you need your guests consent to use photos afterwards
+#			- a disclaimer is shown before a photo can be taken
+#			- the disclaimer can only be closed/accepted by using a dedicated keyboard and key
+#			- both have to be defined in the config
+#			- look up dedicated keyboard string with: xinput | grep "id=.*master.*"
+#			- look up dedicated keysym with: xev | grep "(keysym .*)"
 #  2015-09-17	added security notice for SSH keys (just in case...)
 #  2015-09-16	OTA: added support for DD-WRT routers
 #			- XuBooth needs an SSH key to remotely manage the OTA settings on the router

@@ -4,7 +4,7 @@
 #  <DEFINITIONS>
 # ----------------------------------------------------------------------
 
-	export require_config_version=10
+	export require_config_version=11
 	export xubooth_config_version=-1
 
 # ----------------------------------------------------------------------
@@ -360,9 +360,16 @@
 		rm XuBooth-tmp-vars.sh 2> /dev/null
 		rm XuBooth.lock 2> /dev/null
 
+		# kill the running timeout script for feh (Picture Strip Mode)
 		if [ -f XuBooth-picstrip-timeout.pid ]; then		
 			kill $(cat XuBooth-picstrip-timeout.pid) 2> /dev/null
 			rm XuBooth-picstrip-timeout.pid
+		fi
+
+		# kill the running timeout script for feh (Disclaimer Mode)
+		if [ -f XuBooth-disclaimer-timeout.pid ]; then
+			kill $(cat XuBooth-disclaimer-timeout.pid) 2> /dev/null
+			rm XuBooth-disclaimer-timeout.pid 2> /dev/null
 		fi
 
 		echo "---------------------------------------------------------------------------"
@@ -670,11 +677,6 @@ EOF
 		eog -f -w images/black.gif &
 		sleep 0.5
 
-		# start gPhoto2 in tethering mode
-		echo "---------------------------------------------------------------------------"
-		echo " Starting gphoto2 in tethering mode..."
-		echo "---------------------------------------------------------------------------"
-
 		# start slideshow
 		killall feh 2> /dev/null
 		feh -F --hide-pointer --zoom $photo_zoom -D 5 --randomize $photo_dir/*.jpg &
@@ -727,6 +729,104 @@ EOF
 			fi
 		done;
 	}
+
+
+	# ----------------------------------------------------------------------
+	#  FUNCTION: loop_disclaimer_mode
+	# ----------------------------------------------------------------------
+	function loop_disclaimer_mode() {
+
+		# determine id and master for disclaimer keyboard
+		tmp=`xinput list | grep -i "$disclaimer_kb_name" | sed -r 's/.*id=([0-9]+)\s.*keyboard \(([0-9]+)\).*/\1 \2/g'`
+		disclaimer_kb_id=`echo $tmp | sed -r 's/([0-9]+)\s([0-9]+)/\1/g'`
+		disclaimer_kb_master=`echo $tmp | sed -r 's/([0-9]+)\s([0-9]+)/\2/g'`
+
+		# quit when we can't detect the disclaimer keyboard
+		if [ -z "$disclaimer_kb_id" ] || [ -z "$disclaimer_kb_master" ]; then
+			echo "Couldn't find the disclaimer keyboard (searched for '$disclaimer_kb_name')!"
+			echo "Press <Enter> to quit..."
+			read
+			return
+		fi
+
+		# replace feh key config with ours
+		mkdir -p ~/.config/feh
+		cp feh/disclaimer_keys ~/.config/feh/keys
+		sed -i "s:<<<action_key>>>:$disclaimer_kb_action_key:g" ~/.config/feh/keys
+
+		# open black background image in fullscreen mode
+		killall eog 2> /dev/null
+		eog -f -w images/black.gif &
+		sleep 0.5
+
+		# infinite loop
+		while [ 1 -gt 0 ]; do
+			# get PID for current feh process
+			#   #1 - photo shown after capture
+			#   #2 - slideshow shown after disclaimer timeout
+			fehpid=$(ps auxww | grep feh | grep -v grep | awk '{print $2}')
+
+			# wait for feh to quit (user pressed <Return>)
+			while ps -p $fehpid &>/dev/null; do sleep 1; done;
+
+			# start timeout script for feh in the background and store its PID
+			( sleep $disclaimer_timeout_in_sec; touch XuBooth-disclaimer-timeout.yes; killall feh) & echo $! > XuBooth-disclaimer-timeout.pid
+
+			# enable disclaimer keyboard
+			xinput reattach $disclaimer_kb_id $disclaimer_kb_master
+
+			# show disclaimer to user (AND WAIT FOR FEH TO QUIT BY USER OR TIMEOUT)
+			killall feh 2> /dev/null
+			feh -F --hide-pointer --zoom $photo_zoom $disclaimer_image
+
+			if [ -f XuBooth-disclaimer-timeout.yes ]; then
+				# we get here when the timeout script did its job
+				echo "Timeout! Showing a slideshow for entertainment..."
+				rm XuBooth-disclaimer-timeout.yes 2> /dev/null
+				rm XuBooth-disclaimer-timeout.pid 2> /dev/null
+
+				# start slideshow (AND WAIT FOR FEH TO QUIT!)
+				feh -F --hide-pointer --zoom $photo_zoom -D 5 --randomize $photo_dir/*.jpg
+			else
+				# disable disclaimer keyboard
+				xinput float $disclaimer_kb_id
+
+				# kill the running timeout script for feh
+				if [ -f XuBooth-disclaimer-timeout.pid ]; then
+					kill $(cat XuBooth-disclaimer-timeout.pid) 2> /dev/null
+					rm XuBooth-disclaimer-timeout.pid 2> /dev/null
+				fi
+
+				# start gphoto2 in tethering mode
+				gphoto2 --quiet --capture-tethered --hook-script=XuBooth-tether-hook-disclaimer.sh --filename="$photo_dir/$filename_prefix-%Y%m%d-%H%M%S.%C" --force-overwrite
+
+				if [ ! -f XuBooth-disclaimer-finished.yes ]; then
+					# we get here when the connection was interrupted
+					echo "---------------------------------------------------------------------------"
+					echo  "Lost connection to camera! Waiting for it to come back on..."
+					echo "---------------------------------------------------------------------------"
+					killall eog 2> /dev/null
+					killall feh 2> /dev/null
+					eog -f -w $intermission_image &
+					sleep 5
+	
+					# wait for camera to show up again
+					wait_for_camera
+
+					# open black background image in fullscreen mode
+					killall eog 2> /dev/null
+					eog -f -w images/black.gif &
+					sleep 0.5
+				else
+					# remove indicator file for a successful capture
+					rm XuBooth-disclaimer-finished.yes 2> /dev/null
+				fi
+
+			fi
+
+		done;
+	}
+
 
 # ----------------------------------------------------------------------
 #  </FUNCTIONS>
@@ -813,6 +913,9 @@ EOF
 			;;
 		"picstrip")
 			loop_picstrip_mode
+			;;
+		"disclaimer")
+			loop_disclaimer_mode
 			;;
 		*)
 			echo "No valid shooting mode selected in config file! Stopping here!"

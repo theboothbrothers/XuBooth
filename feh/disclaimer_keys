@@ -1,0 +1,40 @@
+# enable binding for dedicated key (assigned to quit feh)
+quit <<<action_key>>>
+
+# disable bindings for keys <0> to <9>
+action_0 
+action_1 
+action_2 
+action_3 
+action_4 
+action_5 
+action_6 
+action_7 
+action_8 
+action_9 
+
+# disable bindings for <left>, <right>, <up> and <down> cursors
+prev_img 
+next_img 
+scroll_left 
+scroll_right 
+scroll_up 
+scroll_down 
+menu_up 
+menu_down 
+menu_parent 
+menu_child 
+
+# disable bindings for <,>
+orient_1 
+orient_3
+
+# disable bindings for <+> and <->
+zoom_in 
+zoom_out 
+reload_plus 
+reload_minus 
+
+# disable bindings for <*> and </>
+zoom_default 
+zoom_fit 

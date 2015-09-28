@@ -3,6 +3,8 @@ config/*
 images/ads/*
 !images/ads/theboothbrothers1.jpg
 !images/ads/theboothbrothers2.jpg
+images/disclaimer/*
+!images/disclaimer/theboothbrothers.jpg
 images/overlays/*
 !images/overlays/theboothbrothers.png
 images/picstrip/*

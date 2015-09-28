@@ -3,7 +3,7 @@
 #
 # PLEASE DO NOT CHANGE THE FOLLOWING LINE UNLESS YOU KNOW WHAT YOU'RE DOING
 #
-export xubooth_config_version=10
+export xubooth_config_version=11
 
 
 
@@ -18,6 +18,7 @@ export photo_zoom=max
 export intermission_image="images/intermission/theboothbrothers1.gif"
 export shooting_mode=default
 #export shooting_mode=picstrip
+#export shooting_mode=disclaimer
 
 # -----------------------------------
 # PictureStrip Mode
@@ -30,6 +31,14 @@ export picstrip_geometry_1="689x459!+70+70"
 export picstrip_geometry_2="689x459!+834+70"
 export picstrip_geometry_3="689x459!+1597+70"
 export picstrip_geometry_4="1457x971!+829+598"
+
+# -----------------------------------
+# Dislaimer Mode
+# -----------------------------------
+export disclaimer_kb_name="Dell USB"
+export disclaimer_kb_action_key="KP_Enter"
+export disclaimer_image="images/disclaimer/theboothbrothers.jpg"
+export disclaimer_timeout_in_sec="300"
 
 # -----------------------------------
 # Overlay Logo
