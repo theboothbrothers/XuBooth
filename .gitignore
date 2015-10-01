@@ -4,7 +4,8 @@ images/ads/*
 !images/ads/theboothbrothers1.jpg
 !images/ads/theboothbrothers2.jpg
 images/disclaimer/*
-!images/disclaimer/theboothbrothers.jpg
+!images/disclaimer/theboothbrothers1.jpg
+!images/disclaimer/theboothbrothers2.jpg
 images/overlays/*
 !images/overlays/theboothbrothers.png
 images/picstrip/*

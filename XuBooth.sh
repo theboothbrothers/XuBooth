@@ -4,7 +4,7 @@
 #  <DEFINITIONS>
 # ----------------------------------------------------------------------
 
-	export require_config_version=11
+	export require_config_version=12
 	export xubooth_config_version=-1
 
 # ----------------------------------------------------------------------
@@ -761,6 +761,7 @@ EOF
 
 		# infinite loop
 		while [ 1 -gt 0 ]; do
+
 			# get PID for current feh process
 			#   #1 - photo shown after capture
 			#   #2 - slideshow shown after disclaimer timeout
@@ -772,12 +773,12 @@ EOF
 			# start timeout script for feh in the background and store its PID
 			( sleep $disclaimer_timeout_in_sec; touch XuBooth-disclaimer-timeout.yes; killall feh) & echo $! > XuBooth-disclaimer-timeout.pid
 
-			# enable disclaimer keyboard
-			xinput reattach $disclaimer_kb_id $disclaimer_kb_master
-
 			# show disclaimer to user (AND WAIT FOR FEH TO QUIT BY USER OR TIMEOUT)
 			killall feh 2> /dev/null
-			feh -F --hide-pointer --zoom $photo_zoom $disclaimer_image
+			feh -F --hide-pointer --zoom $photo_zoom $disclaimer_image1
+
+			# show motivational image touser (AND DON'T WAIT!)
+			feh -F --hide-pointer --zoom $photo_zoom $disclaimer_image2 &
 
 			if [ -f XuBooth-disclaimer-timeout.yes ]; then
 				# we get here when the timeout script did its job
@@ -797,8 +798,14 @@ EOF
 					rm XuBooth-disclaimer-timeout.pid 2> /dev/null
 				fi
 
+				# dump camera's buffer (if user triggered camera while gphoto2 was not running => buffered image(s))
+				gphoto2 --wait-event=1
+
 				# start gphoto2 in tethering mode
 				gphoto2 --quiet --capture-tethered --hook-script=XuBooth-tether-hook-disclaimer.sh --filename="$photo_dir/$filename_prefix-%Y%m%d-%H%M%S.%C" --force-overwrite
+
+				# enable disclaimer keyboard
+				xinput reattach $disclaimer_kb_id $disclaimer_kb_master
 
 				if [ ! -f XuBooth-disclaimer-finished.yes ]; then
 					# we get here when the connection was interrupted

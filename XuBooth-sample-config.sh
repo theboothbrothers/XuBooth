@@ -3,7 +3,7 @@
 #
 # PLEASE DO NOT CHANGE THE FOLLOWING LINE UNLESS YOU KNOW WHAT YOU'RE DOING
 #
-export xubooth_config_version=11
+export xubooth_config_version=12
 
 
 
@@ -37,7 +37,8 @@ export picstrip_geometry_4="1457x971!+829+598"
 # -----------------------------------
 export disclaimer_kb_name="Dell USB"
 export disclaimer_kb_action_key="KP_Enter"
-export disclaimer_image="images/disclaimer/theboothbrothers.jpg"
+export disclaimer_image1="images/disclaimer/theboothbrothers1.jpg"
+export disclaimer_image2="images/disclaimer/theboothbrothers2.jpg"
 export disclaimer_timeout_in_sec="300"
 
 # -----------------------------------

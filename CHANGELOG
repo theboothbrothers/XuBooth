@@ -1,9 +1,10 @@
 ########################################################################################################################
-# XuBooth 1.8.2
+# XuBooth 1.8.3
 ########################################################################################################################
 #  2015-10-01	Tools.sh
 #			- disclaimer mode: test config
 #			- disclaimer mode: find keyboard name and action key 
+#		FIX: gphoto2 issue when user took photos while gphoto was not running
 #  2015-09-28	introduced Disclaimer mode
 #			- useful for public events where you need your guests consent to use photos afterwards
 #			- a disclaimer is shown before a photo can be taken
