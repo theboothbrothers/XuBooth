@@ -737,7 +737,7 @@ EOF
 	function loop_disclaimer_mode() {
 
 		# determine id and master for disclaimer keyboard
-		tmp=`xinput list | grep -i "$disclaimer_kb_name" | sed -r 's/.*id=([0-9]+)\s.*keyboard \(([0-9]+)\).*/\1 \2/g'`
+		tmp=`xinput list | grep -i "$disclaimer_kb_name" | sed -r 's/.*id=([0-9]+).+\[.+\(([0-9]+)\).*\].*/\1 \2/g'`
 		disclaimer_kb_id=`echo $tmp | sed -r 's/([0-9]+)\s([0-9]+)/\1/g'`
 		disclaimer_kb_master=`echo $tmp | sed -r 's/([0-9]+)\s([0-9]+)/\2/g'`
 

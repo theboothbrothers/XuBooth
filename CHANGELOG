@@ -1,8 +1,8 @@
 ########################################################################################################################
-# XuBooth 1.8.1
+# XuBooth 1.8.2
 ########################################################################################################################
 #  2015-10-01	Tools.sh
-#			- test disclaimer mode config
+#			- disclaimer mode: test config
 #			- disclaimer mode: find keyboard name and action key 
 #  2015-09-28	introduced Disclaimer mode
 #			- useful for public events where you need your guests consent to use photos afterwards
