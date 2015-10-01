@@ -372,6 +372,11 @@
 			rm XuBooth-disclaimer-timeout.pid 2> /dev/null
 		fi
 
+		# enable disclaimer keyboard (Disclaimer Mode)
+		if [ "$shooting_mode" == "disclaimer" ]; then
+			xinput reattach $disclaimer_kb_id $disclaimer_kb_master
+		fi
+
 		echo "---------------------------------------------------------------------------"
 		echo " XuBooth exited successfully."
 		echo "---------------------------------------------------------------------------"
