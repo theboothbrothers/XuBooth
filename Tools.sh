@@ -279,6 +279,118 @@ function TestOverlays() {
 	rm "images/benchmark/18mp_overlay_test.jpg"
 }
 
+function FindDisclaimerKeyboardSettings() {
+	echo "1. find disclaimer keyboard name"
+	echo "------------------------------------------------------"
+	echo " * this will list all input devices currently connected"
+	echo " * search for something that matches your keyboard's maker and/or model name"
+	echo
+	xinput | grep --color=never "id=.*keyboard.*"
+	
+	echo
+	echo "Press <Enter> for next step"
+	read	
+
+	echo "2. find disclaimer keyboard action key"
+	echo "------------------------------------------------------"
+	echo " * press the key you wish to use"
+	echo " * look for the name of the shown keysym"
+	echo " * close the GUI window when you're done"
+	echo
+	xev -name "Press action key on disclaimer keyboard" -rv -geometry 600x250+0+0 | grep --color=always "(keysym .*)"
+}
+
+function TestDisclaimerMode() {
+	echo "---------------------------------------------------------------------------"
+	echo " Checking configuration file(s)..."
+	echo "---------------------------------------------------------------------------"
+
+	# check if there are actually config files
+	if [[ -z $(ls -A config/*.sh 2>/dev/null) ]]; then
+		echo "Found no configuration files!"
+		echo " - copy 'XuBooth-sample-config.sh' to subfolder 'config'"
+		echo " - rename to <name-of-choice>.sh"
+		echo " - modify settings to your needs"
+		echo
+	fi
+
+	# if there is only 1 file => just use it
+	if [ `ls -1 config/*.sh | wc -l 2> /dev/null` -eq 1 ]; then
+		# read/run the config file
+		config_file=`ls -1 config/*.sh 2> /dev/null`
+
+
+	# else let user choose configuration
+	else
+		let i=0
+		config_files=()
+
+		# collect all config files in array
+		IFSBACKUP=$IFS
+		IFS=$(echo -en "\n\b")
+		for f in `ls config/*.sh | sort -fV`; do
+			let i=$i+1
+			config_files+=($i "$f")
+		done
+		IFS=$IFSBACKUP
+
+		# let user choose the config file
+		choice=$(dialog --title "Choose configuration" --menu "" 20 60 10 "${config_files[@]}" 3>&2 2>&1 1>&3)
+
+		clear
+		echo "---------------------------------------------------------------------------"
+		echo " Checking configuration file(s)..."
+		echo "---------------------------------------------------------------------------"
+
+		# user cancelled
+		if [ -z "$choice" ]; then
+			echo "No configuration selected! Exiting now."
+			read
+		else
+			config_file=${config_files[2*$choice - 1]}
+		fi
+	fi
+
+	# load config
+	echo " * loading $config_file..."
+	echo 
+	source "$config_file"
+ 
+	# determine id and master for disclaimer keyboard
+	tmp=`xinput list | grep -i "$disclaimer_kb_name" | sed -r 's/.*id=([0-9]+)\s.*keyboard \(([0-9]+)\).*/\1 \2/g'`
+	disclaimer_kb_id=`echo $tmp | sed -r 's/([0-9]+)\s([0-9]+)/\1/g'`
+	disclaimer_kb_master=`echo $tmp | sed -r 's/([0-9]+)\s([0-9]+)/\2/g'`
+
+	# quit when we can't detect the disclaimer keyboard
+	if [ -z "$disclaimer_kb_id" ] || [ -z "$disclaimer_kb_master" ]; then
+		echo "Couldn't find the disclaimer keyboard (searched for '$disclaimer_kb_name')!"
+		read
+	else
+		echo "We found the disclaimer keyboard. Starting tests right now..."
+		echo
+
+		# disable disclaimer keyboard
+		xinput float $disclaimer_kb_id
+
+		echo "Test #1 - disabling disclaimer keyboard"
+		echo "--------------------------------------------------"
+		echo " * please use the keyboard now"
+		echo " * you should NOT see what you type on that keyboard"
+		echo " * press <Enter> on the internal keyboard for the next test"
+		read
+		echo
+
+		# enable disclaimer keyboard
+		xinput reattach $disclaimer_kb_id $disclaimer_kb_master
+
+		echo "Test #2 - enabling disclaimer keyboard"
+		echo "--------------------------------------------------"
+		echo " * please use the keyboard now"
+		echo " * you should see what you type on that keyboard"
+		echo " * press <Enter> on either keyboard to finish the tests"
+		read
+	fi
+}
 
 
 
@@ -294,7 +406,9 @@ while [ 1 -gt 0 ]; do
 	menu_entries+=(2 "Benchmark")
 	menu_entries+=(3 "RepairXuBooth")
 	menu_entries+=(4 "TestOverlays")
-	menu_entries+=(5 "CreateSshKey")
+	menu_entries+=(5 "TestDisclaimerMode")
+	menu_entries+=(6 "FindDisclaimerKeyboardSettings")
+	menu_entries+=(7 "CreateSshKey")
 	menu_entries+=(q "quit")
 	choice=$(dialog --title "Choose the tool you would like to start" --menu "" 20 60 10 "${menu_entries[@]}" 3>&2 2>&1 1>&3)
 

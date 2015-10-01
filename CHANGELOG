@@ -1,12 +1,15 @@
 ########################################################################################################################
-# XuBooth 1.8
+# XuBooth 1.8.1
 ########################################################################################################################
+#  2015-10-01	Tools.sh
+#			- test disclaimer mode config
+#			- disclaimer mode: find keyboard name and action key 
 #  2015-09-28	introduced Disclaimer mode
 #			- useful for public events where you need your guests consent to use photos afterwards
 #			- a disclaimer is shown before a photo can be taken
 #			- the disclaimer can only be closed/accepted by using a dedicated keyboard and key
 #			- both have to be defined in the config
-#			- look up dedicated keyboard string with: xinput | grep "id=.*master.*"
+#			- look up dedicated keyboard string with: xinput | grep "id=.*keyboard.*"
 #			- look up dedicated keysym with: xev | grep "(keysym .*)"
 #  2015-09-17	added security notice for SSH keys (just in case...)
 #  2015-09-16	OTA: added support for DD-WRT routers
