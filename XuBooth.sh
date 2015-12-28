@@ -157,7 +157,7 @@
 		if [ $ota_active -ne 1 ]; then return; fi
 
 		# if OTA is not using a USB device, skip this function
-		if [ "$ota_device" != "USB" ]; then return; fi
+		if [ "$ota_device" != "usb" ]; then return; fi
 
 		let i=0
 		lan_devices=()
@@ -206,7 +206,7 @@
 		if [ $ota_active -ne 1 ]; then return; fi
 
 		# if OTA is not using a USB device, skip this function
-		if [ "$ota_device" != "USB" ]; then return; fi
+		if [ "$ota_device" != "usb" ]; then return; fi
 
 		let i=0
 		wlan_devices=()
@@ -438,7 +438,7 @@
 		fi
 
 		# save original config files
-		if [ "$ota_device" == "USB" ]; then
+		if [ "$ota_device" == "usb" ]; then
 			cp /etc/default/hostapd ./ota-conf/hostapd.orig
 			cp /etc/dnsmasq.conf ./ota-conf/dnsmasq.conf.orig
 			cp /etc/network/interfaces ./ota-conf/interfaces.orig
@@ -455,7 +455,7 @@ sudo bash <<"EOF"
 		source XuBooth-tmp-vars.sh
 		source "$config_file"
 
-		if [ "$ota_device" == "USB" ]; then
+		if [ "$ota_device" == "usb" ]; then
 			# put our config files into place and replace placeholders
 			cp ./ota-conf/dnsmasq.conf /etc/dnsmasq.conf
 			sed -i "s:<<<dev_wlan0>>>:$ota_dev_wlan0:g" /etc/dnsmasq.conf
@@ -483,7 +483,9 @@ sudo bash <<"EOF"
 			# reload wlan interface
 			ifdown $ota_dev_wlan0
 			ifup $ota_dev_wlan0
-		else
+		fi
+
+		if [ "$ota_device" == "ddwrt" ]; then
 			# retrieve current IP we get from the DD-WRT router
 			this_ip=`hostname -I | cut -f1 -d' '`
 
@@ -577,7 +579,7 @@ sudo bash <<"EOF"
 		source XuBooth-tmp-vars.sh
 		source "$config_file"
 
-		if [ "$ota_device" == "USB" ]; then
+		if [ "$ota_device" == "usb" ]; then
 			# restore original config files
 			cp ./ota-conf/hostapd.orig /etc/default/hostapd
 			cp ./ota-conf/dnsmasq.conf.orig /etc/dnsmasq.conf
@@ -589,7 +591,9 @@ sudo bash <<"EOF"
 			# reload wlan interface
 			ifdown $ota_dev_wlan0
 			ifup $ota_dev_wlan0
-		else
+		fi
+
+		if [ "$ota_device" == "ddwrt" ]; then
 			# create temporary script for DD-WRT
 			echo '
 				# get wifi device name
@@ -625,7 +629,7 @@ sudo bash <<"EOF"
 EOF
 
 		# delete stored original config files
-		if [ "$ota_device" == "USB" ]; then
+		if [ "$ota_device" == "usb" ]; then
 			rm ./ota-conf/hostapd.orig
 			rm ./ota-conf/dnsmasq.conf.orig
 			rm ./ota-conf/interfaces.orig

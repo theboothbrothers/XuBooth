@@ -36,7 +36,7 @@ sudo bash <<"EOF"
 	echo  $config_file
 	read
 
-	if [ "$ota_device" == "USB" ]; then
+	if [ "$ota_device" == "usb" ]; then
 		# shutdown wlan interface
 		ifdown $ota_dev_wlan0
 
