@@ -163,7 +163,7 @@
 		<h2><?php echo $caption; ?></h2>
 	</header>
 
-	<div id="reload"><a href=""></a></div>
+	<div id="reload"><a href="?page="></a></div>
 	
 	<div id="disclaimer">
 		<?php echo $disclaimer; ?>

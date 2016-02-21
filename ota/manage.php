@@ -415,6 +415,7 @@ function checkGET() {
 				<th>File</th>
 			</tr>
 			<?php
+				echo sprintf("<tr><td colspan=4 align=center>%d</td></tr>", sizeof($stats));
 				foreach($stats as $stat) {
 					echo "<tr>";
 					echo sprintf("<td>%s</td>", $stat->date);
