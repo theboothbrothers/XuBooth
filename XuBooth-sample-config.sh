@@ -93,7 +93,7 @@ export ota_active=0
 	export ota_wlan_country_code=DE
 
 	# OTA Branding
-	export ota_domain="theboothbrothers.de"
+	export ota_domain="fotobox.link"
 	export ota_title="Over-The-Air"
 	export ota_caption="Your Photobooth Gallery"
 	export ota_disclaimer="<b>Please note</b>: there is <b><u>no public access</u></b> to the internet in this wifi. Please disconnect from this wifi when finished downloading. Otherwise you won't be able to surf the internet and share your images online."
