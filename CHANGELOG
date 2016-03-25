@@ -1,6 +1,15 @@
 ########################################################################################################################
-# XuBooth 1.8.7
+# XuBooth 1.9
 ########################################################################################################################
+#  2016-03-25	PictureStrip mode
+#			- introduced cropping: allows cropping of an image to fit within certain PictureStrip boxes
+#			- use parameters "picstrip_crop_#" and "picstrip_cropgravity_#" in config file
+#			- no need to provide resizing parameters to "picstrip_geometry_#" when using cropping
+#			- picstrip_crop_# = <width>x<height><resizetype>
+#				- resizetype = "^" (= cut to fit)
+#				- resizetype = "!" (= stretch image if necessary)
+#				- resizetype = "" (= resize to bounding box and keep aspect ratio)
+#			- picstrip_cropgravity_# = Center | North | East | South | West
 #  2016-03-09	changed OTA domain in sample config from "theboothbrothers.de" to "fotobox.link"
 #  2016-02-21	OTA reload button now links to 1st page instead (with newest photos)
 #  2015-12-28	fixed OTA USB mode detection

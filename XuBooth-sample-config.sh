@@ -3,7 +3,7 @@
 #
 # PLEASE DO NOT CHANGE THE FOLLOWING LINE UNLESS YOU KNOW WHAT YOU'RE DOING
 #
-export xubooth_config_version=12
+export xubooth_config_version=13
 
 
 
@@ -25,12 +25,23 @@ export shooting_mode=default
 # -----------------------------------
 export picstrip_timeout_in_sec="300"
 export picstrip_template="images/picstrip/theboothbrothers.jpg"
+export picstrip_images="1"
+export picstrip_quality="80"
 export picstrip_images="4"
 export picstrip_quality="80"
+export picstrip_crop_1=""
+export picstrip_cropgravity_1=""
 export picstrip_geometry_1="689x459!+70+70"
+export picstrip_crop_2=""
+export picstrip_cropgravity_2=""
 export picstrip_geometry_2="689x459!+834+70"
+export picstrip_crop_3=""
+export picstrip_cropgravity_3=""
 export picstrip_geometry_3="689x459!+1597+70"
+export picstrip_crop_4=""
+export picstrip_cropgravity_4=""
 export picstrip_geometry_4="1457x971!+829+598"
+
 
 # -----------------------------------
 # Dislaimer Mode

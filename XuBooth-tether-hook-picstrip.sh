@@ -17,6 +17,8 @@ function downloadImage() {
 
 	# extract picstrip count from filename
 	count=$(echo $filename | sed -r 's/^.*picstrip_([0-9]+).*$/\1/i')
+	crop=picstrip_crop_$count
+	grav=picstrip_cropgravity_$count
 	geo=picstrip_geometry_$count
 
 	# calculate timestamp and new filename
@@ -27,13 +29,28 @@ function downloadImage() {
 	case $count in
 		# process last photo (or 1st photo if $picstrip_images = 1)
 		$picstrip_images)
-			
-			if [ $picstrip_images -gt 1 ]; then
-				# composite image into intermediate output
-				gm composite -compress jpeg -quality $picstrip_quality -compose over -geometry ${!geo} "$argument" "$photo_dir/picstrip.tmp" "$photo_dir/picstrip.tmp"
+
+
+			if [ -z "${!crop}" ]; then
+				# no cropping parameters given => only compose
+				if [ $picstrip_images -gt 1 ]; then
+					# composite image into intermediate output
+					gm composite -compress jpeg -quality $picstrip_quality -compose over -geometry ${!geo} "$argument" "$photo_dir/picstrip.tmp" "$photo_dir/picstrip.tmp"
+				else
+					# composite first image into template
+					gm composite -compress jpeg -quality 100 -compose over -geometry ${!geo} "$argument" "$photo_dir/../$picstrip_template" "$photo_dir/picstrip.tmp"
+				fi
 			else
-				# composite first image into template
-				gm composite -compress jpeg -quality 100 -compose over -geometry ${!geo} "$argument" "$photo_dir/../$picstrip_template" "$photo_dir/picstrip.tmp"
+				# cropping parameters => first crop, then compose
+				gm convert -compress jpeg -quality 100 "$argument" -gravity ${!grav} -thumbnail ${!crop} -extent ${!crop} "$photo_dir/picstrip-crop.tmp"
+				if [ $picstrip_images -gt 1 ]; then
+					# composite image into intermediate output
+					gm composite -compress jpeg -quality $picstrip_quality -compose over -geometry ${!geo} "$photo_dir/picstrip-crop.tmp" "$photo_dir/picstrip.tmp" "$photo_dir/picstrip.tmp"
+				else
+					# composite first image into template
+					gm composite -compress jpeg -quality 100 -compose over -geometry ${!geo} "$photo_dir/picstrip-crop.tmp" "$photo_dir/../$picstrip_template" "$photo_dir/picstrip.tmp"
+				fi
+				rm "$photo_dir/picstrip-crop.tmp" 2> /dev/null
 			fi
 
 			# move original photo to SOOC folder
@@ -89,7 +106,15 @@ function downloadImage() {
 			( sleep $picstrip_timeout_in_sec; touch XuBooth-picstrip-timeout.yes; killall gphoto2) & echo $! > XuBooth-picstrip-timeout.pid
 
 			# composite first image into template
-			gm composite -compress jpeg -quality 100 -compose over -geometry ${!geo} "$argument" "$photo_dir/../$picstrip_template" "$photo_dir/picstrip.tmp"
+			if [ -z "${!crop}" ]; then
+				# no cropping parameters given => only compose
+				gm composite -compress jpeg -quality 100 -compose over -geometry ${!geo} "$argument" "$photo_dir/../$picstrip_template" "$photo_dir/picstrip.tmp"
+			else
+				# cropping parameters => first crop, then compose
+				gm convert -compress jpeg -quality 100 "$argument" -gravity "${!grav}" -thumbnail ${!crop} -extent ${!crop} "$photo_dir/picstrip-crop.tmp"
+				gm composite -compress jpeg -quality 100 -compose over -geometry ${!geo} "$photo_dir/picstrip-crop.tmp" "$photo_dir/../$picstrip_template" "$photo_dir/picstrip.tmp"
+				rm "$photo_dir/picstrip-crop.tmp" 2> /dev/null
+			fi
 
 			# kill current slideshow
 			killall feh 2> /dev/null
@@ -105,7 +130,15 @@ function downloadImage() {
 		# process intermediate photo (only if $picstrip_images >= 2)
 		*)
 			# composite image into intermediate output
-			gm composite -compress jpeg -quality 100 -compose over -geometry ${!geo} "$argument" "$photo_dir/picstrip.tmp" "$photo_dir/picstrip.tmp"
+			if [ -z "${!crop}" ]; then
+				# no cropping parameters given => only compose
+				gm composite -compress jpeg -quality 100 -compose over -geometry ${!geo} "$argument" "$photo_dir/picstrip.tmp" "$photo_dir/picstrip.tmp"
+			else
+				# cropping parameters => first crop, then compose
+				gm convert -compress jpeg -quality 100 "$argument" -gravity "${!grav}" -thumbnail ${!crop} -extent ${!crop} "$photo_dir/picstrip-crop.tmp"
+				gm composite -compress jpeg -quality 100 -compose over -geometry ${!geo} "$photo_dir/picstrip-crop.tmp" "$photo_dir/picstrip.tmp" "$photo_dir/picstrip.tmp"
+				rm "$photo_dir/picstrip-crop.tmp" 2> /dev/null
+			fi
 
 			# kill current slideshow
 			killall feh 2> /dev/null
