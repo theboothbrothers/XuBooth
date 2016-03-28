@@ -1,6 +1,7 @@
 ########################################################################################################################
-# XuBooth 1.9
+# XuBooth 1.9.1
 ########################################################################################################################
+#  2016-03-28	FIX: required config file version incorrect
 #  2016-03-25	PictureStrip mode
 #			- introduced cropping: allows cropping of an image to fit within certain PictureStrip boxes
 #			- use parameters "picstrip_crop_#" and "picstrip_cropgravity_#" in config file

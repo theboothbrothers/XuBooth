@@ -4,7 +4,7 @@
 #  <DEFINITIONS>
 # ----------------------------------------------------------------------
 
-	export require_config_version=12
+	export require_config_version=13
 	export xubooth_config_version=-1
 
 # ----------------------------------------------------------------------
