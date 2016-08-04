@@ -1,6 +1,12 @@
 ########################################################################################################################
-# XuBooth 1.9.1
+# XuBooth 1.9.5
 ########################################################################################################################
+#  2016-08-04	Mosaic Slideshow (OTA)
+#			- introduced mosaic slideshow for OTA
+#			- perfect to be shown via projector
+#			- point browser to "/mosaic.php"
+#			- new images will pop up and add to the mosaic
+#			- medium-sized OTA images will be used for display (you may modify "ota_image_height" for performance
 #  2016-03-28	FIX: required config file version incorrect
 #  2016-03-25	PictureStrip mode
 #			- introduced cropping: allows cropping of an image to fit within certain PictureStrip boxes

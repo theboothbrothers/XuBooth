@@ -25,8 +25,6 @@ export shooting_mode=default
 # -----------------------------------
 export picstrip_timeout_in_sec="300"
 export picstrip_template="images/picstrip/theboothbrothers.jpg"
-export picstrip_images="1"
-export picstrip_quality="80"
 export picstrip_images="4"
 export picstrip_quality="80"
 export picstrip_crop_1=""
