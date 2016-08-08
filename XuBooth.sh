@@ -4,7 +4,7 @@
 #  <DEFINITIONS>
 # ----------------------------------------------------------------------
 
-	export require_config_version=13
+	export require_config_version=14
 	export xubooth_config_version=-1
 
 # ----------------------------------------------------------------------
@@ -420,9 +420,11 @@
 		rm ota/img-s 2> /dev/null
 		rm ota/img-m 2> /dev/null
 		rm ota/img-l 2> /dev/null
-		ln -s ../$photo_dir/ota-large ota/img-l
-		ln -s ../$photo_dir/ota-medium ota/img-m
+		rm ota/img-ads 2> /dev/null
 		ln -s ../$photo_dir/ota-small ota/img-s
+		ln -s ../$photo_dir/ota-medium ota/img-m
+		ln -s ../$photo_dir/ota-large ota/img-l
+		ln -s ../images/ads-mosaic ota/img-ads
 
 		# put customized OTA files in OTA folder
 		echo "$ota_management_user:$ota_management_pass" > ./ota/.htpasswd

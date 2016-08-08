@@ -3,6 +3,8 @@ config/*
 images/ads/*
 !images/ads/theboothbrothers1.jpg
 !images/ads/theboothbrothers2.jpg
+images/ads-mosaic/*
+!images/ads/theboothbrothers.jpg
 images/disclaimer/*
 !images/disclaimer/theboothbrothers1.jpg
 !images/disclaimer/theboothbrothers2.jpg
@@ -22,6 +24,7 @@ ota/hostapd.deny
 ota/img-l
 ota/img-m
 ota/img-s
+ota/img-ads
 ota-conf/*.orig
 ota-ssh-keys/*
 !ota-ssh-keys/README

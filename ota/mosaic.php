@@ -18,20 +18,16 @@
 			// update interval (ask server for new photos) in msec
 			var updateInterval = 2000;
 
-			// max. amount of new images
+			// max. amount of new images (only those will be fetched)
 			var maxNewImages = 35;
 
 			// turn on browsers's fullscreen mode
 			var e = document.getElementById("fullscreen");
 			e.addEventListener("click", function() {
 				var elem = document.getElementsByTagName("body")[0];
-				if (elem.requestFullScreen) {
-					elem.requestFullScreen();
-				} else if (elem.mozRequestFullScreen) {
-					elem.mozRequestFullScreen();
-				} else if (elem.webkitRequestFullScreen) {
-					elem.webkitRequestFullScreen();
-				}
+				if (elem.requestFullScreen) { elem.requestFullScreen(); }
+				else if (elem.mozRequestFullScreen) { elem.mozRequestFullScreen(); }
+				else if (elem.webkitRequestFullScreen) { elem.webkitRequestFullScreen(); }
 				document.getElementById("fullscreen").style.display = "none";
 			});
 
@@ -67,33 +63,50 @@
 				wall.fitWidth();
 				
 				// timestamp of latest photo retrieval
-				var timestamp = 1432426255;
 				var timestamp = 0;
 				
 				// html template for new cells
-				var tmpl = '<div class="cell" style="width: {width}px; height: {height}px; background-image: url({url})"></div>';
+				var tmpl = '<div class="cell" style="width: {width}px; height: {height}px; background-image: url({bgimage}); background-color: {bgcolor}"><div class="content">{content}</div></div>';
 				
 				// repeatedly ask server for new images
 				setInterval(function() {
 					
 					$.getJSON("mosaic-fetch-photos.php?timestamp=" + timestamp, function(json) {
-						if(json.files != null) {
-							// save timestamp to only retrieve newer files next time
+						if(json.images != null) {
+							// save timestamp to only retrieve newer images next time
 							timestamp = json.timestamp;
 							
 							// limit number of new images if greater than "maxNewImages"
-							var iStart = (json.files.length > maxNewImages ? json.files.length - maxNewImages : 0);
+							var iStart = (json.images.length > maxNewImages ? json.images.length - maxNewImages : 0);
 
 							// append all new photos
-							for(var i = iStart; i < json.files.length; i++) {
+							for(var i = iStart; i < json.images.length; i++) {
 								// determine random cell size
 								var rnd = getRandomInt(0, arSizes.length-1);
 								
 								// replace cell size and photo url placeholders
 								var html = tmpl.replace('{width}', arSizes[rnd][0])
 										.replace('{height}', arSizes[rnd][1])
-										.replace('{url}', "/img-s/" + json.files[i]);
+										.replace('{bgimage}', json.images[i])
+										.replace('{bgcolor}', "")
+										.replace('{content}', "");
 								
+								// append block to current layout
+								wall.appendBlock(html);
+								
+								// auto scroll to bottom of page
+								var $target = $('html,body'); 
+								$target.animate({scrollTop: $target.height()+500}, 250);
+							}
+
+							// append content (if delivered by server)
+							if(json.content != null) {
+								var html = tmpl.replace('{width}', json.content["width"])
+										.replace('{height}', json.content["height"])
+										.replace('{bgimage}', "")
+										.replace('{bgcolor}', json.content["bgcolor"])
+										.replace('{content}', json.content["data"]);
+
 								// append block to current layout
 								wall.appendBlock(html);
 								

@@ -1,6 +1,11 @@
 ########################################################################################################################
-# XuBooth 1.9.5
+# XuBooth 1.9.6
 ########################################################################################################################
+#  2016-08-08	Mosaic Slideshow Ads
+#			- text and image ads can be placed randomly in between photos
+#			- text can be styled with HTML
+#			- images need to be placed inside images/ads-mosaic
+#			- see "ota_mosaic_ads_*" variables in config file
 #  2016-08-04	Mosaic Slideshow (OTA)
 #			- introduced mosaic slideshow for OTA
 #			- perfect to be shown via projector

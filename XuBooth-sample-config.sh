@@ -3,7 +3,7 @@
 #
 # PLEASE DO NOT CHANGE THE FOLLOWING LINE UNLESS YOU KNOW WHAT YOU'RE DOING
 #
-export xubooth_config_version=13
+export xubooth_config_version=14
 
 
 
@@ -123,6 +123,13 @@ export ota_active=0
 	export ota_thumbnail_size=75
 	export ota_thumbnail_border_color="white"
 	export ota_thumbnail_border_size=0
+
+	# OTA Mosaic Slideshow
+#	export ota_mosaic_ads_mode=text
+	export ota_mosaic_ads_mode=images
+	export ota_mosaic_ads_probability_1_over=20
+	export ota_mosaic_ads_text="<h3>Title</h3>Text"
+	export ota_mosaic_ads_bgcolor="#eee"
 
 	# OTA Management Portal
 	export ota_management_user="admin"
