@@ -301,8 +301,8 @@
 			((check++))
 		fi
 
-		if ! type "php5-cgi" 2> /dev/null 1> /dev/null; then
-			echo " * php5-cgi is missing!"
+		if ! type "php-cgi" 2> /dev/null 1> /dev/null; then
+			echo " * php-cgi is missing!"
 			((check++))
 		fi
 

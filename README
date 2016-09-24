@@ -14,13 +14,13 @@ Software requirements
  - hostapd			# wifi access point for Over-The-Air
  - dnsmasq			# DNS/DHCP server for Over-The-Air
  - lighttpd			# web server for Over-The-Air
- - php5-cgi			# php5 module for Over-The-Air
+ - php-cgi			# php5 module for Over-The-Air
  - dialog			# CLI-based menu creation tool (used for e.g. choosing one of several XuBooth configurations)
 
 
 Install requirements on Debian/Ubuntu
 --------------------------------------------
-sudo apt-get install git-core gphoto2 eog feh exiftool graphicsmagick hostapd dnsmasq lighttpd php5-cgi dialog
+sudo apt-get install git-core gphoto2 eog feh exiftool graphicsmagick hostapd dnsmasq lighttpd php-cgi dialog
 
 
 Getting a working copy
