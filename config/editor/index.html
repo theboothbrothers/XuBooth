@@ -1,0 +1,477 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>XuBooth Config Editor</title>
+	<link rel="stylesheet" type="text/css" href="index.css" media="all">
+	<script type="text/javascript">
+		eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('3(7.X){7["R"+a]=a;7["z"+a]=6(){7["R"+a](7.1k)};7.X("1e",7["z"+a])}E{7.19("z",a,15)}2 j=H V();6 a(){2 e=q.1d("1a");3(e){o(e,"P");2 N=B(q,"*","14");3((e.12<=10)||(N=="")){c(e,"P",d)}}4=B(q,"*","1n");k(i=0;i<4.b;i++){3(4[i].F=="1g"||4[i].F=="1f"||4[i].F=="1c"){4[i].1b=6(){r();c(v.5.5,"f",d)};4[i].O=6(){r();c(v.5.5,"f",d)};j.D(j.b,0,4[i])}E{4[i].O=6(){r();c(v.5.5,"f",d)};4[i].18=6(){o(v.5.5,"f")}}}2 C=17.16.13();2 A=q.M("11");3(C.K("J")+1){c(A[0],"J",d)}3(C.K("I")+1){c(A[0],"I",d)}}6 r(){k(2 i=0;i<j.b;i++){o(j[i].5.5,"f")}}6 B(m,y,w){2 x=(y=="*"&&m.Y)?m.Y:m.M(y);2 G=H V();w=w.1m(/\\-/g,"\\\\-");2 L=H 1l("(^|\\\\s)"+w+"(\\\\s|$)");2 n;k(2 i=0;i<x.b;i++){n=x[i];3(L.1j(n.8)){G.1i(n)}}1h(G)}6 o(p,T){3(p.8){2 h=p.8.Z(" ");2 U=T.t();k(2 i=0;i<h.b;i++){3(h[i].t()==U){h.D(i,1);i--}}p.8=h.S(" ")}}6 c(l,u,Q){3(l.8){2 9=l.8.Z(" ");3(Q){2 W=u.t();k(2 i=0;i<9.b;i++){3(9[i].t()==W){9.D(i,1);i--}}}9[9.b]=u;l.8=9.S(" ")}E{l.8=u}}',62,86,'||var|if|elements|parentNode|function|window|className|_16|initialize|length|addClassName|true|_1|highlighted||_10||el_array|for|_13|_6|_c|removeClassName|_e|document|safari_reset||toUpperCase|_14|this|_8|_9|_7|load|_4|getElementsByClassName|_3|splice|else|type|_a|new|firefox|safari|indexOf|_b|getElementsByTagName|_2|onfocus|no_guidelines|_15|event_load|join|_f|_11|Array|_17|attachEvent|all|split|450|body|offsetWidth|toLowerCase|guidelines|false|userAgent|navigator|onblur|addEventListener|main_body|onclick|file|getElementById|onload|radio|checkbox|return|push|test|event|RegExp|replace|element'.split('|'),0,{}))
+	</script>
+	<script type="text/javascript" src="index.js"></script>
+</head>
+<body id="main_body" onload="onBodyLoad();">
+
+<div id="section_load-config-file">
+	<input type="file" id="config_file_chooser" />
+</div>
+
+<div id="section_settings">
+	<form id="settings">
+
+		<article class="tabbox">
+
+
+			<section id="tab_general-settings">
+				<h2><a href="#tab_general-settings">General Settings</a></h2>
+				<ul>
+					<li>
+						<label class="description">Shooting Mode</label>
+						<div><select class="element select small" id="shooting_mode" name="shooting_mode"> 
+							<option value="default" selected="selected">Default Mode</option>
+							<option value="picstrip">PictureStrip Mode</option>
+							<option value="disclaimer">Disclaimer Mode</option>
+						</select></div> 
+					</li>
+					<li>
+						<label class="description">Filename Prefix</label>
+						<div><input id="filename_prefix" name="filename_prefix" class="element text small" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Show Photo [sec]</label>
+						<div><input id="show_photo_in_sec" name="show_photo_in_sec" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Slideshow Interval [sec]</label>
+						<div><input id="slideshow_interval_in_sec" name="slideshow_interval_in_sec" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Photo Zoom</label>
+						<div><select class="element select tiny" id="photo_zoom" name="photo_zoom"> 
+							<option value="max">max</option>
+							<option value="fill" selected="selected">fill</option>
+						</select></div> 
+					</li>
+					<li>
+						<label class="description">Intermission Image</label>
+						<div>
+							<input id="intermission_image" name="intermission_image" class="element text small" type="text" />&nbsp;
+							<input id="intermission_image_chooser" name="intermission_image" alt="images/intermission/" class="element file" type="file"/>
+						</div>
+					</li>
+				</ul>
+			</section>
+
+
+			<section id="tab_shooting-modes">
+				<h2><a href="#tab_shooting-modes">Shooting Modes</a></h2>
+				<ul>
+					<li class="section_break">
+						<h3>PictureStrip Mode</h3>
+						<p></p>
+					</li>
+					
+					<li>
+						<label class="description">Timeout [sec] </label>
+						<div><input id="picstrip_timeout_in_sec" name="picstrip_timeout_in_sec" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Picture Strip Template </label>
+						<div>
+							<input id="picstrip_template" name="picstrip_template" class="element text small" type="text" />&nbsp;
+							<input id="picstrip_template_chooser" name="picstrip_template" alt="images/picstrip/" class="element file" type="file"/>
+						</div>
+					</li>
+					<li>
+						<label class="description">Number of Images </label>
+						<div><input id="picstrip_images" name="picstrip_images" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">JPEG Quality </label>
+						<div><input id="picstrip_quality" name="picstrip_quality" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Crop #1 </label>
+						<div><input id="picstrip_crop_1" name="picstrip_crop_1" class="element text medium" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Crop-Gravity #1 </label>
+						<div><input id="picstrip_cropgravity_1" name="picstrip_cropgravity_1" class="element text medium" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Geometry #1 </label>
+						<div><input id="picstrip_geometry_1" name="picstrip_geometry_1" class="element text medium" type="text" maxlength="255" value=""/></div> 
+					</li>
+					
+					<li class="section_break">
+						<h3>Disclaimer Mode</h3>
+						<p></p>
+					</li>
+					
+					<li>
+						<label class="description">Keyboard Name </label>
+						<div><input id="disclaimer_kb_name" name="disclaimer_kb_name" class="element text medium" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Action Key </label>
+						<div><input id="disclaimer_kb_action_key" name="disclaimer_kb_action_key" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Disclaimer Image #1 </label>
+						<div>
+							<input id="disclaimer_image1" name="disclaimer_image1" class="element text small" type="text" />&nbsp;
+							<input id="disclaimer_image1_chooser" name="disclaimer_image1" alt="images/disclaimer/" class="element file" type="file"/>
+						</div>
+					</li>
+					<li>
+						<label class="description">Disclaimer Image #2 </label>
+						<div>
+							<input id="disclaimer_image2" name="disclaimer_image2" class="element text small" type="text" />&nbsp;
+							<input id="disclaimer_image2_chooser" name="disclaimer_image2" alt="images/disclaimer/" class="element file" type="file"/>
+						</div>
+					</li>
+					<li>
+						<label class="description">Timeout [sec] </label>
+						<div><input id="disclaimer_timeout_in_sec" name="disclaimer_timeout_in_sec" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+				</ul>
+			</section>
+
+
+			<section id="tab_overlay">
+				<h2><a href="#tab_overlay">Overlay</a></h2>
+				<ul>
+					<li>
+						<label class="description">Overlay</label>
+						<span><input id="overlay_active" name="overlay_active" class="element checkbox" type="checkbox" value="1" /><label class="choice">active</label></span> 
+					</li>
+					<li>
+						<label class="description">Overlay Image</label>
+						<div>
+							<input id="overlay_image" name="overlay_image" class="element text small" type="text" />&nbsp;
+							<input id="overlay_image_chooser" name="overlay_image" alt="images/overlays/" class="element file" type="file"/>
+						</div>
+					</li>
+					<li>
+						<label class="description">Opacity (%)</label>
+						<div><input id="overlay_opacity_in_percent" name="overlay_opacity_in_percent" class="element text tiny" type="text" maxlength="255" value=""/></div>
+					</li>
+					<li>
+						<label class="description">Orientation</label>
+						<div><select class="element select small" id="overlay_orientation" name="overlay_orientation"> 
+							<option value="NorthEast" selected="selected">NorthEast</option>
+							<option value="NorthWest" >NorthWest</option>
+							<option value="SouthEast" >SouthEast</option>
+							<option value="SouthWest" >SouthWest</option>
+						</select></div> 
+					</li>
+					<li>
+						<label class="description">Geometry</label>
+						<div><input id="overlay_geometry" name="overlay_geometry" class="element text medium" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">JPEG Quality</label>
+						<div><input id="overlay_jpeg_quality" name="overlay_jpeg_quality" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+				</ul>
+			</section>
+
+
+			<section id="tab_exif-data">
+				<h2><a href="#tab_exif-data">EXIF Data</a></h2>
+				<ul>
+					<li>
+						<label class="description">EXIF Data</label>
+						<span><input id="exif_active" name="exif_active" class="element checkbox" type="checkbox" value="1" /><label class="choice">active</label></span> 
+					</li>
+					<li>
+						<label class="description">Credit</label>
+						<div><input id="exif_credit" name="exif_credit" class="element text medium" type="text" maxlength="255" value=""/></div>
+					</li>
+					<li>
+						<label class="description">Copyright</label>
+						<div><input id="exif_copyright" name="exif_copyright" class="element text medium" type="text" maxlength="255" value=""/></div>
+					</li>
+				</ul>
+			</section>
+
+
+			<section id="tab_ota-general">
+				<h2><a href="#tab_ota-general">Over-The-Air</a></h2>
+				<ul>
+					<li>
+						<label class="description">Over-The-Air </label>
+						<span><input id="ota_active" name="ota_active" class="element checkbox" type="checkbox" value="1" /><label class="choice">active</label></span> 
+					</li>
+					
+					<li class="section_break">
+						<h3>Connection Settings</h3>
+						<p></p>
+					</li>
+					
+					<li>
+						<label class="description">DHCP Lease [min] </label>
+						<div><input id="ota_dhcp_lease_in_min" name="ota_dhcp_lease_in_min" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Wifi SSID </label>
+						<div><input id="ota_wlan_ssid" name="ota_wlan_ssid" class="element text medium" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Wifi Password </label>
+						<div><input id="ota_wlan_pass" name="ota_wlan_pass" class="element text medium" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Device </label>
+						<div><select class="element select small" id="ota_device" name="ota_device"> 
+							<option value="ddwrt" selected="selected">DD-WRT</option>
+							<option value="usb" >USB</option>
+						</select></div> 
+					</li>
+					<li>
+						<label class="description">OTA Domain </label>
+						<div><input id="ota_domain" name="ota_domain" class="element text medium" type="text" maxlength="255" value=""/></div>
+					</li>
+
+					<li class="section_break">
+						<h3>Image Settings</h3>
+						<p></p>
+					</li>
+					
+					<li>
+						<label class="description">Images Per Page </label>
+						<div><input id="ota_images_per_page" name="ota_images_per_page" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Image Expiration [min] </label>
+						<div><input id="ota_image_expiration_in_min" name="ota_image_expiration_in_min" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Image Height [px] </label>
+						<div><input id="ota_image_height" name="ota_image_height" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Image Height (Download) [px] </label>
+						<div><input id="ota_image_height_download" name="ota_image_height_download" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Image Border Color </label>
+						<div>
+							<input id="ota_image_border_color" name="ota_image_border_color" class="element text tiny" type="text" maxlength="255" value=""/>
+							<span id="ota_image_border_color_preview" class="color_preview"></span>
+						</div>
+					</li>
+					<li>
+						<label class="description">Image Border Size [px] </label>
+						<div><input id="ota_image_border_size" name="ota_image_border_size" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Thumbnail Size [px] </label>
+						<div><input id="ota_thumbnail_size" name="ota_thumbnail_size" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Thumbnail Border Color </label>
+						<div>
+							<input id="ota_thumbnail_border_color" name="ota_thumbnail_border_color" class="element text tiny" type="text" maxlength="255" value=""/>
+							<span id="ota_thumbnail_border_color_preview" class="color_preview"></span>
+						</div> 
+					</li>
+					<li>
+						<label class="description">Thumbnail Border Size [px] </label>
+						<div><input id="ota_thumbnail_border_size" name="ota_thumbnail_border_size" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					
+					<li class="section_break">
+						<h3>Branding</h3>
+						<p></p>
+					</li>
+					
+					<li>
+						<label class="description">OTA Title</label>
+						<div><input id="ota_title" name="ota_title" class="element text medium" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">OTA Caption</label>
+						<div><input id="ota_caption" name="ota_caption" class="element text medium" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">OTA Disclaimer Text</label>
+						<div><input id="ota_disclaimer" name="ota_disclaimer" class="element text large" type="text" maxlength="255" value=""/></div>
+						<div id="ota_disclaimer_preview"></div>
+					</li>
+					<li>
+						<label class="description">OTA iOS Download Message</label>
+						<div><input id="ota_ios_message" name="ota_ios_message" class="element text large" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">OTA Body Background Color</label>
+						<div>
+							<input id="ota_body_bgcolor" name="ota_body_bgcolor" class="element text tiny" type="text" maxlength="255" value=""/>
+							<span id="ota_body_bgcolor_preview" class="color_preview"></span>
+						</div> 
+					</li>
+					<li>
+						<label class="description">OTA Header Background Color #1</label>
+						<div>
+							<input id="ota_header_bgcolor_1" name="ota_header_bgcolor_1" class="element text tiny" type="text" maxlength="255" value=""/>
+							<span id="ota_header_bgcolor_1_preview" class="color_preview"></span>
+						</div> 
+					</li>
+					<li>
+						<label class="description">OTA Header Background Color #2</label>
+						<div>
+							<input id="ota_header_bgcolor_2" name="ota_header_bgcolor_2" class="element text tiny" type="text" maxlength="255" value=""/>
+							<span id="ota_header_bgcolor_2_preview" class="color_preview"></span>
+						</div> 
+					</li>
+					
+					<li class="section_break">
+						<h3>Mosaic Slideshow</h3>
+						<p></p>
+					</li>
+					
+					<li>
+						<label class="description">Ads Mode</label>
+						<div><select class="element select small" id="ota_mosaic_ads_mode" name="ota_mosaic_ads_mode"> 
+							<option value="images" selected="selected">Images</option>
+							<option value="text">Text</option>
+						</select></div> 
+					</li>
+					<li>
+						<label class="description">Ads Probability (1:x)</label>
+						<div><input id="ota_mosaic_ads_probability_1_over" name="ota_mosaic_ads_probability_1_over" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Ads Text</label>
+						<div><input id="ota_mosaic_ads_text" name="ota_mosaic_ads_text" class="element text large" type="text" maxlength="255" value=""/></div>
+						<div id="ota_mosaic_ads_text_preview"></div>
+					</li>
+					<li>
+						<label class="description">Background Color</label>
+						<div>
+							<input id="ota_mosaic_ads_bgcolor" name="ota_mosaic_ads_bgcolor" class="element text tiny" type="text" maxlength="255" value=""/>
+							<span id="ota_mosaic_ads_bgcolor_preview" class="color_preview"></span>
+						</div> 
+					</li>
+					
+					<li class="section_break">
+						<h3>Management Console</h3>
+						<p></p>
+					</li>
+					
+					<li>
+						<label class="description">OTA Management User</label>
+						<div><input id="ota_management_user" name="ota_management_user" class="element text small" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">OTA Management Password</label>
+						<div><input id="ota_management_pass" name="ota_management_pass" class="element text small" type="text" maxlength="255" value=""/></div> 
+					</li>
+				</ul>
+			</section>
+
+
+			<section id="tab_ota-ddwrt">
+				<h2><a href="#tab_ota-ddwrt">OTA | Device</a></h2>
+				<ul>
+					<li class="section_break">
+						<h3>DD-WRT</h3>
+						<p></p>
+					</li>
+					
+					<li>
+						<label class="description">DD-WRT IP </label>
+						<div><input id="ota_ddwrt_ip" name="ota_ddwrt_ip" class="element text small" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">DD-WRT SSH Port </label>
+						<div><input id="ota_ddwrt_ssh_port" name="ota_ddwrt_ssh_port" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">DD-WRT SSH Key File </label>
+						<div>
+							<input id="ota_ddwrt_ssh_keyfile" name="ota_ddwrt_ssh_keyfile" class="element text medium" type="text" />&nbsp;
+							<input id="ota_ddwrt_ssh_keyfile_chooser" name="ota_ddwrt_ssh_keyfile" alt="ota-ssh-keys/" class="element file" type="file"/>
+						</div>
+					</li>
+					
+					<li class="section_break">
+						<h3>USB Wifi</h3>
+						<p></p>
+					</li>
+					
+					<li>
+						<label class="description">USB Wifi Driver </label>
+						<div><select class="element select small" id="ota_wlan_driver" name="ota_wlan_driver"> 
+							<option value="nl80211" selected="selected">nl80211</option>
+							<option value="hostap">HostAP</option>
+							<option value="madwifi">madwifi</option>
+							<option value="prism54">prism54</option>
+						</select></div> 
+					</li>
+					<li>
+						<label class="description">USB Wifi Channel </label>
+						<div><input id="ota_wlan_channel" name="ota_wlan_channel" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">USB Wifi Country Code </label>
+						<div><input id="ota_wlan_country_code" name="ota_wlan_country_code" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+				</ul>
+			</section>
+
+
+			<section id="tab_contest-mode">
+				<h2><a href="#tab_contest-mode">Contest Mode</a></h2>
+				<ul>
+					<li>
+						<label class="description">Contest Mode </label>
+						<span><input id="contest_active" name="contest_active" class="element checkbox" type="checkbox" value="1" /><label class="choice">active</label></span> 
+					</li>
+					<li>
+						<label class="description">Probability (1:x) </label>
+						<div><input id="contest_probability_1_over" name="contest_probability_1_over" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Max wins </label>
+						<div><input id="contest_max_wins" name="contest_max_wins" class="element text medium" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Sticker Images </label>
+						<div><input id="contest_sticker_images" name="contest_sticker_images" class="element text large" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Opacity [%] </label>
+						<div><input id="contest_sticker_opacity_in_percent" name="contest_sticker_opacity_in_percent" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">Orientation </label>
+						<div><select class="element select small" id="contest_sticker_orientation" name="contest_sticker_orientation"> 
+							<option value="NorthEast" selected="selected">NorthEast</option>
+							<option value="NorthWest" >NorthWest</option>
+							<option value="SouthEast" >SouthEast</option>
+							<option value="SouthWest" >SouthWest</option>
+						</select></div> 
+					</li>
+					<li>
+						<label class="description">Geometry </label>
+						<div><input id="contest_sticker_geometry" name="contest_sticker_geometry" class="element text medium" type="text" maxlength="255" value=""/></div> 
+					</li>
+					<li>
+						<label class="description">JPEG Quality </label>
+						<div><input id="contest_sticker_jpeg_quality" name="contest_sticker_jpeg_quality" class="element text tiny" type="text" maxlength="255" value=""/></div> 
+					</li>
+				</ul>
+			</section>
+
+
+		</article>
+	</form>
+</div>
+
+<div id="section_download-link">
+	<a id="download-button" class="cursor-not-allowed">Download Config File</a>
+</div>
+
+
+</body>
+</html>
