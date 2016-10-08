@@ -7,7 +7,7 @@ Software requirements
 --------------------------------------------
  - git-core			# downloading/updating XuBooth
  - gphoto2			# camera tethering software
- - eog				# image viewer
+ - eom				# image viewer
  - feh				# slideshow tool
  - exiftool			# customization of photos' EXIF data
  - graphicsmagick		# applying overlays and other graphics onto the photos
@@ -20,7 +20,7 @@ Software requirements
 
 Install requirements on Debian/Ubuntu
 --------------------------------------------
-sudo apt-get install git-core gphoto2 eog feh exiftool graphicsmagick hostapd dnsmasq lighttpd php-cgi dialog
+sudo apt-get install git-core gphoto2 eom feh exiftool graphicsmagick hostapd dnsmasq lighttpd php-cgi dialog
 
 
 Getting a working copy

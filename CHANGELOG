@@ -1,6 +1,8 @@
 ########################################################################################################################
-# XuBooth 1.9.7
+# XuBooth 1.9.8
 ########################################################################################################################
+#  2016-10-08	Fix for (X)Ubuntu 16.04
+			- migrated from EOG to EOM since newer version of EOG is not FULL fullscreen anymore (shows menubar)
 #  2016-09-24	Fix for (X)Ubuntu 16.04
 #			- changed prerequisite "php5-cgi" to meta package "php-cgi" (Ubuntu moved from PHP5 to PHP7)
 #  2016-08-08	Mosaic Slideshow Ads

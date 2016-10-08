@@ -266,8 +266,8 @@
 			((check++))
 		fi
 
-		if ! type "eog" 2> /dev/null 1> /dev/null; then
-			echo " * eog is missing!"
+		if ! type "eom" 2> /dev/null 1> /dev/null; then
+			echo " * eom is missing!"
 			((check++))
 		fi
 
@@ -350,7 +350,7 @@
 	# ----------------------------------------------------------------------
 	function cleanup() {
 		# stop slideshow and image viewer
-		killall eog 2> /dev/null
+		killall eom 2> /dev/null
 		killall feh 2> /dev/null
 
 		# stop OTA
@@ -647,8 +647,8 @@ EOF
 		# infinite loop (restart gPhoto2 if connection gets interrupted)
 		while [ 1 -gt 0 ]; do
 			# open black background image in fullscreen mode
-			killall eog 2> /dev/null
-			eog -f -w images/black.gif &
+			killall eom 2> /dev/null
+			eom -f images/black.gif &
 			sleep 0.5
 
 			# wait a second
@@ -665,12 +665,12 @@ EOF
 			gphoto2 --quiet --capture-tethered --hook-script=XuBooth-tether-hook.sh --filename="$photo_dir/$filename_prefix-%Y%m%d-%H%M%S.%C" --force-overwrite
 
 			# we get here when the connection was interrupted
-			killall eog 2> /dev/null
+			killall eom 2> /dev/null
 			killall feh 2> /dev/null
 			echo "---------------------------------------------------------------------------"
 			echo  "Lost connection to camera! Waiting for it to come back on..."
 			echo "---------------------------------------------------------------------------"
-			eog -f -w $intermission_image &
+			eom -f $intermission_image &
 			sleep 5
 
 			# wait for camera to show up again
@@ -684,8 +684,8 @@ EOF
 	# ----------------------------------------------------------------------
 	function loop_picstrip_mode() {
 		# open black background image in fullscreen mode
-		killall eog 2> /dev/null
-		eog -f -w images/black.gif &
+		killall eom 2> /dev/null
+		eom -f images/black.gif &
 		sleep 0.5
 
 		# start slideshow
@@ -720,17 +720,17 @@ EOF
 					echo "---------------------------------------------------------------------------"
 					echo  "Lost connection to camera! Waiting for it to come back on..."
 					echo "---------------------------------------------------------------------------"
-					killall eog 2> /dev/null
+					killall eom 2> /dev/null
 					killall feh 2> /dev/null
-					eog -f -w $intermission_image &
+					eom -f $intermission_image &
 					sleep 5
-	
+
 					# wait for camera to show up again
 					wait_for_camera
 
 					# open black background image in fullscreen mode
-					killall eog 2> /dev/null
-					eog -f -w images/black.gif &
+					killall eom 2> /dev/null
+					eom -f images/black.gif &
 					sleep 0.5
 
 					# start slideshow
@@ -766,8 +766,8 @@ EOF
 		sed -i "s:<<<action_key>>>:$disclaimer_kb_action_key:g" ~/.config/feh/keys
 
 		# open black background image in fullscreen mode
-		killall eog 2> /dev/null
-		eog -f -w images/black.gif &
+		killall eom 2> /dev/null
+		eom -f images/black.gif &
 		sleep 0.5
 
 		# infinite loop
@@ -823,17 +823,17 @@ EOF
 					echo "---------------------------------------------------------------------------"
 					echo  "Lost connection to camera! Waiting for it to come back on..."
 					echo "---------------------------------------------------------------------------"
-					killall eog 2> /dev/null
+					killall eom 2> /dev/null
 					killall feh 2> /dev/null
-					eog -f -w $intermission_image &
+					eom -f $intermission_image &
 					sleep 5
-	
+
 					# wait for camera to show up again
 					wait_for_camera
 
 					# open black background image in fullscreen mode
-					killall eog 2> /dev/null
-					eog -f -w images/black.gif &
+					killall eom 2> /dev/null
+					eom -f images/black.gif &
 					sleep 0.5
 				else
 					# remove indicator file for a successful capture
